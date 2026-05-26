@@ -1,6 +1,6 @@
-'use server'
+"use server";
 import { ActionResponse } from "@/app/types/actions";
-import { InventoryCount, Product, Admin, Group } from "@/prisma/generated/client";
+import { InventoryCount, Product, Group } from "@/prisma/generated/client";
 import prisma from "./lib/prisma";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "./lib/auth";
@@ -13,14 +13,23 @@ import { revalidatePath } from "next/cache";
 async function getAuthenticatedUser() {
   const session = await getServerSession(authOptions);
   if (!session?.user) return null;
-  return session.user as { id: string; name: string; email: string; role: string };
+  return session.user as {
+    id: string;
+    name: string;
+    email: string;
+    role: string;
+  };
 }
 
 // ─── Scan Action ─────────────────────────────────────────────────────────────
 
 export async function submitCountAction(
-  formData: FormData
-): Promise<ActionResponse<InventoryCount & { product: Product } & { isMismatch: boolean }>> {
+  formData: FormData,
+): Promise<
+  ActionResponse<
+    InventoryCount & { product: Product } & { isMismatch: boolean }
+  >
+> {
   const rawQty = formData.get("quantity");
   const rawBarcode = formData.get("barcode");
 
@@ -40,10 +49,14 @@ export async function submitCountAction(
 
   try {
     const authUser = await getAuthenticatedUser();
-    if (!authUser) return { success: false, error: "Unauthorized: Please log in." };
+    if (!authUser)
+      return { success: false, error: "Unauthorized: Please log in." };
 
-    const product = await prisma.product.findUnique({ where: { barcode: rawBarcode } });
-    if (!product) return { success: false, error: "Product not found in database." };
+    const product = await prisma.product.findUnique({
+      where: { barcode: rawBarcode },
+    });
+    if (!product)
+      return { success: false, error: "Product not found in database." };
 
     // Baseline handling
     if (product.expectedQty === null) {
@@ -72,7 +85,7 @@ export async function submitCountAction(
         where: { productId: product.id },
         _sum: { quantity: true },
       });
-      const totalQty = (total._sum?.quantity || 0);
+      const totalQty = total._sum?.quantity || 0;
       const expected = product.expectedQty ?? 0;
       isMismatch = totalQty !== expected;
     }
@@ -94,11 +107,10 @@ export async function submitCountAction(
   }
 }
 
-
 // ─── Group Actions ─────────────────────────────────────────────────────────────
 
 export async function createGroupAction(
-  formData: FormData
+  formData: FormData,
 ): Promise<ActionResponse<Group>> {
   const name = formData.get("name");
   const password = formData.get("password");
@@ -110,8 +122,11 @@ export async function createGroupAction(
   }
 
   try {
-    const existing = await prisma.group.findUnique({ where: { name: name.trim() } });
-    if (existing) return { success: false, error: "Group name already exists." };
+    const existing = await prisma.group.findUnique({
+      where: { name: name.trim() },
+    });
+    if (existing)
+      return { success: false, error: "Group name already exists." };
 
     const hashedPassword = await bcrypt.hash(password, 12);
     const group = await prisma.group.create({
@@ -126,20 +141,32 @@ export async function createGroupAction(
 }
 
 export async function renameGroupAction(
-  formData: FormData
+  formData: FormData,
 ): Promise<ActionResponse<Group>> {
   const id = formData.get("id");
   const name = formData.get("name");
   const password = formData.get("password");
-  if (!id || !name || typeof id !== "string" || typeof name !== "string" || !name.trim()) {
+  if (
+    !id ||
+    !name ||
+    typeof id !== "string" ||
+    typeof name !== "string" ||
+    !name.trim()
+  ) {
     return { success: false, error: "Group id and name are required." };
   }
 
   try {
-    const conflict = await prisma.group.findFirst({ where: { name: name.trim(), NOT: { id } } });
-    if (conflict) return { success: false, error: "A group with that name already exists." };
+    const conflict = await prisma.group.findFirst({
+      where: { name: name.trim(), NOT: { id } },
+    });
+    if (conflict)
+      return {
+        success: false,
+        error: "A group with that name already exists.",
+      };
 
-    const data: any = { name: name.trim() };
+    const data = { name: name.trim(), password: "" };
     if (password && typeof password === "string" && password.trim()) {
       data.password = await bcrypt.hash(password, 12);
     }
@@ -153,21 +180,23 @@ export async function renameGroupAction(
   }
 }
 
-export async function getAllScansAction(): Promise<ActionResponse<{
-  scans: Array<{
-    timestamp: Date;
-    userName: string;
-    productName: string;
-    quantity: number;
-    isMismatch: boolean;
-  }>;
-  stats: {
-    totalCounted: number;
-    mismatches: number;
-    activeUsersCount: number;
-  };
-  productCounts: Record<string, { expectedQty: number; scannedQty: number }>;
-}>> {
+export async function getAllScansAction(): Promise<
+  ActionResponse<{
+    scans: Array<{
+      timestamp: Date;
+      userName: string;
+      productName: string;
+      quantity: number;
+      isMismatch: boolean;
+    }>;
+    stats: {
+      totalCounted: number;
+      mismatches: number;
+      activeUsersCount: number;
+    };
+    productCounts: Record<string, { expectedQty: number; scannedQty: number }>;
+  }>
+> {
   try {
     const authUser = await getAuthenticatedUser();
     if (!authUser || authUser.role !== "ADMIN") {
@@ -194,7 +223,7 @@ export async function getAllScansAction(): Promise<ActionResponse<{
     });
 
     // Mismatches are now based on scans having isMismatch = true
-    const mismatches = counts.filter(c => c.isMismatch).length;
+    const mismatches = counts.filter((c) => c.isMismatch).length;
     const totalCounted = counts.length; // Actually totalCounted previously summed quantity. Let's keep it summing quantity or just count the scans? "Total Items Scanned" -> total quantity. Let's sum quantity.
     const totalScannedQuantity = counts.reduce((s, c) => s + c.quantity, 0);
 
@@ -226,7 +255,7 @@ export async function getAllScansAction(): Promise<ActionResponse<{
 // ─── Product / Import Actions ─────────────────────────────────────────────────
 
 export async function importProductsAction(
-  formData: FormData
+  formData: FormData,
 ): Promise<ActionResponse<{ count: number }>> {
   const file = formData.get("file") as File | null;
   if (!file) return { success: false, error: "No file uploaded." };
@@ -239,12 +268,15 @@ export async function importProductsAction(
     return { success: true, data: { count: results.length } };
   } catch (e) {
     console.error("Failed to import products:", e);
-    return { success: false, error: "Failed to import products. Check your file format." };
+    return {
+      success: false,
+      error: "Failed to import products. Check your file format.",
+    };
   }
 }
 
 export async function searchProductsAction(
-  query: string
+  query: string,
 ): Promise<ActionResponse<Product[]>> {
   if (!query || typeof query !== "string" || !query.trim()) {
     return { success: true, data: [] };
@@ -266,13 +298,17 @@ export async function searchProductsAction(
 
 // ─── Accuracy Actions ───────────────────────────────────────────
 
-export async function getGroupAccuracyStatsAction(): Promise<ActionResponse<Array<{
-  groupId: string;
-  groupName: string;
-  totalScanned: number;
-  errorsCount: number;
-  accuracyRatio: string;
-}>>> {
+export async function getGroupAccuracyStatsAction(): Promise<
+  ActionResponse<
+    Array<{
+      groupId: string;
+      groupName: string;
+      totalScanned: number;
+      errorsCount: number;
+      accuracyRatio: string;
+    }>
+  >
+> {
   try {
     const groups = await prisma.group.findMany({
       include: {
@@ -289,7 +325,7 @@ export async function getGroupAccuracyStatsAction(): Promise<ActionResponse<Arra
       const totalScanned = group.counts.reduce((sum, c) => sum + c.quantity, 0);
 
       // Compute errors: any scan by the group that is a mismatch
-      let errorsCount = group.counts.filter(c => c.isMismatch).length;
+      const errorsCount = group.counts.filter((c) => c.isMismatch).length;
 
       // Exactitude formula: number of items inventoried / number of errors committed
       let accuracyRatio = "100%"; // default if no errors
