@@ -148,6 +148,7 @@ exports.Prisma.InventoryCountScalarFieldEnum = {
   productId: 'productId',
   groupId: 'groupId',
   quantity: 'quantity',
+  location: 'location',
   timestamp: 'timestamp',
   isMismatch: 'isMismatch'
 };

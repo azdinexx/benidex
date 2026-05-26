@@ -41,6 +41,7 @@ model InventoryCount {
   groupId    String
   group      Group    @relation(fields: [groupId], references: [id])
   quantity   Int
+  location   String
   timestamp  DateTime @default(now())
   isMismatch Boolean  @default(false)
 }

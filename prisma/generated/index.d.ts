@@ -4474,6 +4474,7 @@ export namespace Prisma {
     productId: string | null
     groupId: string | null
     quantity: number | null
+    location: string | null
     timestamp: Date | null
     isMismatch: boolean | null
   }
@@ -4483,6 +4484,7 @@ export namespace Prisma {
     productId: string | null
     groupId: string | null
     quantity: number | null
+    location: string | null
     timestamp: Date | null
     isMismatch: boolean | null
   }
@@ -4492,6 +4494,7 @@ export namespace Prisma {
     productId: number
     groupId: number
     quantity: number
+    location: number
     timestamp: number
     isMismatch: number
     _all: number
@@ -4511,6 +4514,7 @@ export namespace Prisma {
     productId?: true
     groupId?: true
     quantity?: true
+    location?: true
     timestamp?: true
     isMismatch?: true
   }
@@ -4520,6 +4524,7 @@ export namespace Prisma {
     productId?: true
     groupId?: true
     quantity?: true
+    location?: true
     timestamp?: true
     isMismatch?: true
   }
@@ -4529,6 +4534,7 @@ export namespace Prisma {
     productId?: true
     groupId?: true
     quantity?: true
+    location?: true
     timestamp?: true
     isMismatch?: true
     _all?: true
@@ -4625,6 +4631,7 @@ export namespace Prisma {
     productId: string
     groupId: string
     quantity: number
+    location: string
     timestamp: Date
     isMismatch: boolean
     _count: InventoryCountCountAggregateOutputType | null
@@ -4653,6 +4660,7 @@ export namespace Prisma {
     productId?: boolean
     groupId?: boolean
     quantity?: boolean
+    location?: boolean
     timestamp?: boolean
     isMismatch?: boolean
     product?: boolean | ProductDefaultArgs<ExtArgs>
@@ -4664,6 +4672,7 @@ export namespace Prisma {
     productId?: boolean
     groupId?: boolean
     quantity?: boolean
+    location?: boolean
     timestamp?: boolean
     isMismatch?: boolean
     product?: boolean | ProductDefaultArgs<ExtArgs>
@@ -4675,6 +4684,7 @@ export namespace Prisma {
     productId?: boolean
     groupId?: boolean
     quantity?: boolean
+    location?: boolean
     timestamp?: boolean
     isMismatch?: boolean
     product?: boolean | ProductDefaultArgs<ExtArgs>
@@ -4686,11 +4696,12 @@ export namespace Prisma {
     productId?: boolean
     groupId?: boolean
     quantity?: boolean
+    location?: boolean
     timestamp?: boolean
     isMismatch?: boolean
   }
 
-  export type InventoryCountOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "productId" | "groupId" | "quantity" | "timestamp" | "isMismatch", ExtArgs["result"]["inventoryCount"]>
+  export type InventoryCountOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "productId" | "groupId" | "quantity" | "location" | "timestamp" | "isMismatch", ExtArgs["result"]["inventoryCount"]>
   export type InventoryCountInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     product?: boolean | ProductDefaultArgs<ExtArgs>
     group?: boolean | GroupDefaultArgs<ExtArgs>
@@ -4715,6 +4726,7 @@ export namespace Prisma {
       productId: string
       groupId: string
       quantity: number
+      location: string
       timestamp: Date
       isMismatch: boolean
     }, ExtArgs["result"]["inventoryCount"]>
@@ -5146,6 +5158,7 @@ export namespace Prisma {
     readonly productId: FieldRef<"InventoryCount", 'String'>
     readonly groupId: FieldRef<"InventoryCount", 'String'>
     readonly quantity: FieldRef<"InventoryCount", 'Int'>
+    readonly location: FieldRef<"InventoryCount", 'String'>
     readonly timestamp: FieldRef<"InventoryCount", 'DateTime'>
     readonly isMismatch: FieldRef<"InventoryCount", 'Boolean'>
   }
@@ -5618,6 +5631,7 @@ export namespace Prisma {
     productId: 'productId',
     groupId: 'groupId',
     quantity: 'quantity',
+    location: 'location',
     timestamp: 'timestamp',
     isMismatch: 'isMismatch'
   };
@@ -5893,6 +5907,7 @@ export namespace Prisma {
     productId?: StringFilter<"InventoryCount"> | string
     groupId?: StringFilter<"InventoryCount"> | string
     quantity?: IntFilter<"InventoryCount"> | number
+    location?: StringFilter<"InventoryCount"> | string
     timestamp?: DateTimeFilter<"InventoryCount"> | Date | string
     isMismatch?: BoolFilter<"InventoryCount"> | boolean
     product?: XOR<ProductScalarRelationFilter, ProductWhereInput>
@@ -5904,6 +5919,7 @@ export namespace Prisma {
     productId?: SortOrder
     groupId?: SortOrder
     quantity?: SortOrder
+    location?: SortOrder
     timestamp?: SortOrder
     isMismatch?: SortOrder
     product?: ProductOrderByWithRelationInput
@@ -5918,6 +5934,7 @@ export namespace Prisma {
     productId?: StringFilter<"InventoryCount"> | string
     groupId?: StringFilter<"InventoryCount"> | string
     quantity?: IntFilter<"InventoryCount"> | number
+    location?: StringFilter<"InventoryCount"> | string
     timestamp?: DateTimeFilter<"InventoryCount"> | Date | string
     isMismatch?: BoolFilter<"InventoryCount"> | boolean
     product?: XOR<ProductScalarRelationFilter, ProductWhereInput>
@@ -5929,6 +5946,7 @@ export namespace Prisma {
     productId?: SortOrder
     groupId?: SortOrder
     quantity?: SortOrder
+    location?: SortOrder
     timestamp?: SortOrder
     isMismatch?: SortOrder
     _count?: InventoryCountCountOrderByAggregateInput
@@ -5946,6 +5964,7 @@ export namespace Prisma {
     productId?: StringWithAggregatesFilter<"InventoryCount"> | string
     groupId?: StringWithAggregatesFilter<"InventoryCount"> | string
     quantity?: IntWithAggregatesFilter<"InventoryCount"> | number
+    location?: StringWithAggregatesFilter<"InventoryCount"> | string
     timestamp?: DateTimeWithAggregatesFilter<"InventoryCount"> | Date | string
     isMismatch?: BoolWithAggregatesFilter<"InventoryCount"> | boolean
   }
@@ -6125,6 +6144,7 @@ export namespace Prisma {
   export type InventoryCountCreateInput = {
     id?: string
     quantity: number
+    location: string
     timestamp?: Date | string
     isMismatch?: boolean
     product: ProductCreateNestedOneWithoutCountsInput
@@ -6136,6 +6156,7 @@ export namespace Prisma {
     productId: string
     groupId: string
     quantity: number
+    location: string
     timestamp?: Date | string
     isMismatch?: boolean
   }
@@ -6143,6 +6164,7 @@ export namespace Prisma {
   export type InventoryCountUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     quantity?: IntFieldUpdateOperationsInput | number
+    location?: StringFieldUpdateOperationsInput | string
     timestamp?: DateTimeFieldUpdateOperationsInput | Date | string
     isMismatch?: BoolFieldUpdateOperationsInput | boolean
     product?: ProductUpdateOneRequiredWithoutCountsNestedInput
@@ -6154,6 +6176,7 @@ export namespace Prisma {
     productId?: StringFieldUpdateOperationsInput | string
     groupId?: StringFieldUpdateOperationsInput | string
     quantity?: IntFieldUpdateOperationsInput | number
+    location?: StringFieldUpdateOperationsInput | string
     timestamp?: DateTimeFieldUpdateOperationsInput | Date | string
     isMismatch?: BoolFieldUpdateOperationsInput | boolean
   }
@@ -6163,6 +6186,7 @@ export namespace Prisma {
     productId: string
     groupId: string
     quantity: number
+    location: string
     timestamp?: Date | string
     isMismatch?: boolean
   }
@@ -6170,6 +6194,7 @@ export namespace Prisma {
   export type InventoryCountUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     quantity?: IntFieldUpdateOperationsInput | number
+    location?: StringFieldUpdateOperationsInput | string
     timestamp?: DateTimeFieldUpdateOperationsInput | Date | string
     isMismatch?: BoolFieldUpdateOperationsInput | boolean
   }
@@ -6179,6 +6204,7 @@ export namespace Prisma {
     productId?: StringFieldUpdateOperationsInput | string
     groupId?: StringFieldUpdateOperationsInput | string
     quantity?: IntFieldUpdateOperationsInput | number
+    location?: StringFieldUpdateOperationsInput | string
     timestamp?: DateTimeFieldUpdateOperationsInput | Date | string
     isMismatch?: BoolFieldUpdateOperationsInput | boolean
   }
@@ -6468,6 +6494,7 @@ export namespace Prisma {
     productId?: SortOrder
     groupId?: SortOrder
     quantity?: SortOrder
+    location?: SortOrder
     timestamp?: SortOrder
     isMismatch?: SortOrder
   }
@@ -6481,6 +6508,7 @@ export namespace Prisma {
     productId?: SortOrder
     groupId?: SortOrder
     quantity?: SortOrder
+    location?: SortOrder
     timestamp?: SortOrder
     isMismatch?: SortOrder
   }
@@ -6490,6 +6518,7 @@ export namespace Prisma {
     productId?: SortOrder
     groupId?: SortOrder
     quantity?: SortOrder
+    location?: SortOrder
     timestamp?: SortOrder
     isMismatch?: SortOrder
   }
@@ -6955,6 +6984,7 @@ export namespace Prisma {
   export type InventoryCountCreateWithoutGroupInput = {
     id?: string
     quantity: number
+    location: string
     timestamp?: Date | string
     isMismatch?: boolean
     product: ProductCreateNestedOneWithoutCountsInput
@@ -6964,6 +6994,7 @@ export namespace Prisma {
     id?: string
     productId: string
     quantity: number
+    location: string
     timestamp?: Date | string
     isMismatch?: boolean
   }
@@ -7030,6 +7061,7 @@ export namespace Prisma {
     productId?: StringFilter<"InventoryCount"> | string
     groupId?: StringFilter<"InventoryCount"> | string
     quantity?: IntFilter<"InventoryCount"> | number
+    location?: StringFilter<"InventoryCount"> | string
     timestamp?: DateTimeFilter<"InventoryCount"> | Date | string
     isMismatch?: BoolFilter<"InventoryCount"> | boolean
   }
@@ -7056,6 +7088,7 @@ export namespace Prisma {
   export type InventoryCountCreateWithoutProductInput = {
     id?: string
     quantity: number
+    location: string
     timestamp?: Date | string
     isMismatch?: boolean
     group: GroupCreateNestedOneWithoutCountsInput
@@ -7065,6 +7098,7 @@ export namespace Prisma {
     id?: string
     groupId: string
     quantity: number
+    location: string
     timestamp?: Date | string
     isMismatch?: boolean
   }
@@ -7228,6 +7262,7 @@ export namespace Prisma {
     id?: string
     productId: string
     quantity: number
+    location: string
     timestamp?: Date | string
     isMismatch?: boolean
   }
@@ -7261,6 +7296,7 @@ export namespace Prisma {
   export type InventoryCountUpdateWithoutGroupInput = {
     id?: StringFieldUpdateOperationsInput | string
     quantity?: IntFieldUpdateOperationsInput | number
+    location?: StringFieldUpdateOperationsInput | string
     timestamp?: DateTimeFieldUpdateOperationsInput | Date | string
     isMismatch?: BoolFieldUpdateOperationsInput | boolean
     product?: ProductUpdateOneRequiredWithoutCountsNestedInput
@@ -7270,6 +7306,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     productId?: StringFieldUpdateOperationsInput | string
     quantity?: IntFieldUpdateOperationsInput | number
+    location?: StringFieldUpdateOperationsInput | string
     timestamp?: DateTimeFieldUpdateOperationsInput | Date | string
     isMismatch?: BoolFieldUpdateOperationsInput | boolean
   }
@@ -7278,6 +7315,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     productId?: StringFieldUpdateOperationsInput | string
     quantity?: IntFieldUpdateOperationsInput | number
+    location?: StringFieldUpdateOperationsInput | string
     timestamp?: DateTimeFieldUpdateOperationsInput | Date | string
     isMismatch?: BoolFieldUpdateOperationsInput | boolean
   }
@@ -7286,6 +7324,7 @@ export namespace Prisma {
     id?: string
     groupId: string
     quantity: number
+    location: string
     timestamp?: Date | string
     isMismatch?: boolean
   }
@@ -7293,6 +7332,7 @@ export namespace Prisma {
   export type InventoryCountUpdateWithoutProductInput = {
     id?: StringFieldUpdateOperationsInput | string
     quantity?: IntFieldUpdateOperationsInput | number
+    location?: StringFieldUpdateOperationsInput | string
     timestamp?: DateTimeFieldUpdateOperationsInput | Date | string
     isMismatch?: BoolFieldUpdateOperationsInput | boolean
     group?: GroupUpdateOneRequiredWithoutCountsNestedInput
@@ -7302,6 +7342,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     groupId?: StringFieldUpdateOperationsInput | string
     quantity?: IntFieldUpdateOperationsInput | number
+    location?: StringFieldUpdateOperationsInput | string
     timestamp?: DateTimeFieldUpdateOperationsInput | Date | string
     isMismatch?: BoolFieldUpdateOperationsInput | boolean
   }
@@ -7310,6 +7351,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     groupId?: StringFieldUpdateOperationsInput | string
     quantity?: IntFieldUpdateOperationsInput | number
+    location?: StringFieldUpdateOperationsInput | string
     timestamp?: DateTimeFieldUpdateOperationsInput | Date | string
     isMismatch?: BoolFieldUpdateOperationsInput | boolean
   }
