@@ -3,7 +3,7 @@ import ProductsPageClient from "./ProductsPageClient";
 
 export default async function ProductsPage() {
   const products = await prisma.product.findMany({
-    orderBy: { name: "asc" },
+    orderBy: { barcode: "asc" },
   });
 
   return <ProductsPageClient initialProducts={products} />;

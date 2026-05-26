@@ -69,7 +69,7 @@ export default async function UserCountsPage() {
                     <td className="px-6 py-3 text-sm text-slate-400 whitespace-nowrap">
                       {new Date(c.timestamp).toLocaleString()}
                     </td>
-                    <td className="px-6 py-3 font-medium text-slate-800">{c.product.name}</td>
+                    <td className="px-6 py-3 font-medium text-slate-800">{c.product.barcode}</td>
                     <td className="px-6 py-3 font-mono text-xs text-slate-500">{c.product.barcode}</td>
                     <td className="px-6 py-3">
                       <span className="font-bold text-blue-600 bg-blue-50 px-2.5 py-1 rounded-lg text-sm">+{c.quantity}</span>

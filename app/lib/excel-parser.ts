@@ -22,14 +22,12 @@ export async function importProductsFromBuffer(buffer: Buffer) {
     
     seenRefs.add(ref);
 
-    const name = String(getVal('name') || 'Unknown Product');
     const category = getVal('category') ? String(getVal('category')) : null;
     const priceVal = getVal('price');
     const price = priceVal !== undefined && !isNaN(Number(priceVal)) ? Number(priceVal) : null;
 
     validProducts.push({
       barcode: ref,
-      name,
       category,
       price,
     });
@@ -41,13 +39,11 @@ export async function importProductsFromBuffer(buffer: Buffer) {
       prisma.product.upsert({
         where: { barcode: p.barcode },
         update: {
-          name: p.name,
           category: p.category,
           price: p.price,
         },
         create: {
           barcode: p.barcode,
-          name: p.name,
           category: p.category,
           price: p.price,
         }

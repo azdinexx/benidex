@@ -1139,13 +1139,13 @@ export namespace Prisma {
    */
 
   export type GroupCountOutputType = {
-    counts: number
     baselineProducts: number
+    counts: number
   }
 
   export type GroupCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    counts?: boolean | GroupCountOutputTypeCountCountsArgs
     baselineProducts?: boolean | GroupCountOutputTypeCountBaselineProductsArgs
+    counts?: boolean | GroupCountOutputTypeCountCountsArgs
   }
 
   // Custom InputTypes
@@ -1162,15 +1162,15 @@ export namespace Prisma {
   /**
    * GroupCountOutputType without action
    */
-  export type GroupCountOutputTypeCountCountsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: InventoryCountWhereInput
+  export type GroupCountOutputTypeCountBaselineProductsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ProductWhereInput
   }
 
   /**
    * GroupCountOutputType without action
    */
-  export type GroupCountOutputTypeCountBaselineProductsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: ProductWhereInput
+  export type GroupCountOutputTypeCountCountsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: InventoryCountWhereInput
   }
 
 
@@ -2357,8 +2357,8 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     password?: boolean
-    counts?: boolean | Group$countsArgs<ExtArgs>
     baselineProducts?: boolean | Group$baselineProductsArgs<ExtArgs>
+    counts?: boolean | Group$countsArgs<ExtArgs>
     _count?: boolean | GroupCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["group"]>
 
@@ -2382,8 +2382,8 @@ export namespace Prisma {
 
   export type GroupOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "password", ExtArgs["result"]["group"]>
   export type GroupInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    counts?: boolean | Group$countsArgs<ExtArgs>
     baselineProducts?: boolean | Group$baselineProductsArgs<ExtArgs>
+    counts?: boolean | Group$countsArgs<ExtArgs>
     _count?: boolean | GroupCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type GroupIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -2392,8 +2392,8 @@ export namespace Prisma {
   export type $GroupPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Group"
     objects: {
-      counts: Prisma.$InventoryCountPayload<ExtArgs>[]
       baselineProducts: Prisma.$ProductPayload<ExtArgs>[]
+      counts: Prisma.$InventoryCountPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -2793,8 +2793,8 @@ export namespace Prisma {
    */
   export interface Prisma__GroupClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    counts<T extends Group$countsArgs<ExtArgs> = {}>(args?: Subset<T, Group$countsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InventoryCountPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     baselineProducts<T extends Group$baselineProductsArgs<ExtArgs> = {}>(args?: Subset<T, Group$baselineProductsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProductPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    counts<T extends Group$countsArgs<ExtArgs> = {}>(args?: Subset<T, Group$countsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InventoryCountPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3220,30 +3220,6 @@ export namespace Prisma {
   }
 
   /**
-   * Group.counts
-   */
-  export type Group$countsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the InventoryCount
-     */
-    select?: InventoryCountSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the InventoryCount
-     */
-    omit?: InventoryCountOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: InventoryCountInclude<ExtArgs> | null
-    where?: InventoryCountWhereInput
-    orderBy?: InventoryCountOrderByWithRelationInput | InventoryCountOrderByWithRelationInput[]
-    cursor?: InventoryCountWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: InventoryCountScalarFieldEnum | InventoryCountScalarFieldEnum[]
-  }
-
-  /**
    * Group.baselineProducts
    */
   export type Group$baselineProductsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -3265,6 +3241,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: ProductScalarFieldEnum | ProductScalarFieldEnum[]
+  }
+
+  /**
+   * Group.counts
+   */
+  export type Group$countsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InventoryCount
+     */
+    select?: InventoryCountSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the InventoryCount
+     */
+    omit?: InventoryCountOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InventoryCountInclude<ExtArgs> | null
+    where?: InventoryCountWhereInput
+    orderBy?: InventoryCountOrderByWithRelationInput | InventoryCountOrderByWithRelationInput[]
+    cursor?: InventoryCountWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: InventoryCountScalarFieldEnum | InventoryCountScalarFieldEnum[]
   }
 
   /**
@@ -5779,16 +5779,16 @@ export namespace Prisma {
     id?: StringFilter<"Group"> | string
     name?: StringFilter<"Group"> | string
     password?: StringFilter<"Group"> | string
-    counts?: InventoryCountListRelationFilter
     baselineProducts?: ProductListRelationFilter
+    counts?: InventoryCountListRelationFilter
   }
 
   export type GroupOrderByWithRelationInput = {
     id?: SortOrder
     name?: SortOrder
     password?: SortOrder
-    counts?: InventoryCountOrderByRelationAggregateInput
     baselineProducts?: ProductOrderByRelationAggregateInput
+    counts?: InventoryCountOrderByRelationAggregateInput
   }
 
   export type GroupWhereUniqueInput = Prisma.AtLeast<{
@@ -5798,8 +5798,8 @@ export namespace Prisma {
     OR?: GroupWhereInput[]
     NOT?: GroupWhereInput | GroupWhereInput[]
     password?: StringFilter<"Group"> | string
-    counts?: InventoryCountListRelationFilter
     baselineProducts?: ProductListRelationFilter
+    counts?: InventoryCountListRelationFilter
   }, "id" | "name">
 
   export type GroupOrderByWithAggregationInput = {
@@ -6010,32 +6010,32 @@ export namespace Prisma {
     id?: string
     name: string
     password: string
-    counts?: InventoryCountCreateNestedManyWithoutGroupInput
     baselineProducts?: ProductCreateNestedManyWithoutBaselineGroupInput
+    counts?: InventoryCountCreateNestedManyWithoutGroupInput
   }
 
   export type GroupUncheckedCreateInput = {
     id?: string
     name: string
     password: string
-    counts?: InventoryCountUncheckedCreateNestedManyWithoutGroupInput
     baselineProducts?: ProductUncheckedCreateNestedManyWithoutBaselineGroupInput
+    counts?: InventoryCountUncheckedCreateNestedManyWithoutGroupInput
   }
 
   export type GroupUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
-    counts?: InventoryCountUpdateManyWithoutGroupNestedInput
     baselineProducts?: ProductUpdateManyWithoutBaselineGroupNestedInput
+    counts?: InventoryCountUpdateManyWithoutGroupNestedInput
   }
 
   export type GroupUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
-    counts?: InventoryCountUncheckedUpdateManyWithoutGroupNestedInput
     baselineProducts?: ProductUncheckedUpdateManyWithoutBaselineGroupNestedInput
+    counts?: InventoryCountUncheckedUpdateManyWithoutGroupNestedInput
   }
 
   export type GroupCreateManyInput = {
@@ -6265,23 +6265,23 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
-  export type InventoryCountListRelationFilter = {
-    every?: InventoryCountWhereInput
-    some?: InventoryCountWhereInput
-    none?: InventoryCountWhereInput
-  }
-
   export type ProductListRelationFilter = {
     every?: ProductWhereInput
     some?: ProductWhereInput
     none?: ProductWhereInput
   }
 
-  export type InventoryCountOrderByRelationAggregateInput = {
-    _count?: SortOrder
+  export type InventoryCountListRelationFilter = {
+    every?: InventoryCountWhereInput
+    some?: InventoryCountWhereInput
+    none?: InventoryCountWhereInput
   }
 
   export type ProductOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type InventoryCountOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -6530,13 +6530,6 @@ export namespace Prisma {
     set?: Date | string
   }
 
-  export type InventoryCountCreateNestedManyWithoutGroupInput = {
-    create?: XOR<InventoryCountCreateWithoutGroupInput, InventoryCountUncheckedCreateWithoutGroupInput> | InventoryCountCreateWithoutGroupInput[] | InventoryCountUncheckedCreateWithoutGroupInput[]
-    connectOrCreate?: InventoryCountCreateOrConnectWithoutGroupInput | InventoryCountCreateOrConnectWithoutGroupInput[]
-    createMany?: InventoryCountCreateManyGroupInputEnvelope
-    connect?: InventoryCountWhereUniqueInput | InventoryCountWhereUniqueInput[]
-  }
-
   export type ProductCreateNestedManyWithoutBaselineGroupInput = {
     create?: XOR<ProductCreateWithoutBaselineGroupInput, ProductUncheckedCreateWithoutBaselineGroupInput> | ProductCreateWithoutBaselineGroupInput[] | ProductUncheckedCreateWithoutBaselineGroupInput[]
     connectOrCreate?: ProductCreateOrConnectWithoutBaselineGroupInput | ProductCreateOrConnectWithoutBaselineGroupInput[]
@@ -6544,7 +6537,7 @@ export namespace Prisma {
     connect?: ProductWhereUniqueInput | ProductWhereUniqueInput[]
   }
 
-  export type InventoryCountUncheckedCreateNestedManyWithoutGroupInput = {
+  export type InventoryCountCreateNestedManyWithoutGroupInput = {
     create?: XOR<InventoryCountCreateWithoutGroupInput, InventoryCountUncheckedCreateWithoutGroupInput> | InventoryCountCreateWithoutGroupInput[] | InventoryCountUncheckedCreateWithoutGroupInput[]
     connectOrCreate?: InventoryCountCreateOrConnectWithoutGroupInput | InventoryCountCreateOrConnectWithoutGroupInput[]
     createMany?: InventoryCountCreateManyGroupInputEnvelope
@@ -6558,18 +6551,11 @@ export namespace Prisma {
     connect?: ProductWhereUniqueInput | ProductWhereUniqueInput[]
   }
 
-  export type InventoryCountUpdateManyWithoutGroupNestedInput = {
+  export type InventoryCountUncheckedCreateNestedManyWithoutGroupInput = {
     create?: XOR<InventoryCountCreateWithoutGroupInput, InventoryCountUncheckedCreateWithoutGroupInput> | InventoryCountCreateWithoutGroupInput[] | InventoryCountUncheckedCreateWithoutGroupInput[]
     connectOrCreate?: InventoryCountCreateOrConnectWithoutGroupInput | InventoryCountCreateOrConnectWithoutGroupInput[]
-    upsert?: InventoryCountUpsertWithWhereUniqueWithoutGroupInput | InventoryCountUpsertWithWhereUniqueWithoutGroupInput[]
     createMany?: InventoryCountCreateManyGroupInputEnvelope
-    set?: InventoryCountWhereUniqueInput | InventoryCountWhereUniqueInput[]
-    disconnect?: InventoryCountWhereUniqueInput | InventoryCountWhereUniqueInput[]
-    delete?: InventoryCountWhereUniqueInput | InventoryCountWhereUniqueInput[]
     connect?: InventoryCountWhereUniqueInput | InventoryCountWhereUniqueInput[]
-    update?: InventoryCountUpdateWithWhereUniqueWithoutGroupInput | InventoryCountUpdateWithWhereUniqueWithoutGroupInput[]
-    updateMany?: InventoryCountUpdateManyWithWhereWithoutGroupInput | InventoryCountUpdateManyWithWhereWithoutGroupInput[]
-    deleteMany?: InventoryCountScalarWhereInput | InventoryCountScalarWhereInput[]
   }
 
   export type ProductUpdateManyWithoutBaselineGroupNestedInput = {
@@ -6586,7 +6572,7 @@ export namespace Prisma {
     deleteMany?: ProductScalarWhereInput | ProductScalarWhereInput[]
   }
 
-  export type InventoryCountUncheckedUpdateManyWithoutGroupNestedInput = {
+  export type InventoryCountUpdateManyWithoutGroupNestedInput = {
     create?: XOR<InventoryCountCreateWithoutGroupInput, InventoryCountUncheckedCreateWithoutGroupInput> | InventoryCountCreateWithoutGroupInput[] | InventoryCountUncheckedCreateWithoutGroupInput[]
     connectOrCreate?: InventoryCountCreateOrConnectWithoutGroupInput | InventoryCountCreateOrConnectWithoutGroupInput[]
     upsert?: InventoryCountUpsertWithWhereUniqueWithoutGroupInput | InventoryCountUpsertWithWhereUniqueWithoutGroupInput[]
@@ -6612,6 +6598,20 @@ export namespace Prisma {
     update?: ProductUpdateWithWhereUniqueWithoutBaselineGroupInput | ProductUpdateWithWhereUniqueWithoutBaselineGroupInput[]
     updateMany?: ProductUpdateManyWithWhereWithoutBaselineGroupInput | ProductUpdateManyWithWhereWithoutBaselineGroupInput[]
     deleteMany?: ProductScalarWhereInput | ProductScalarWhereInput[]
+  }
+
+  export type InventoryCountUncheckedUpdateManyWithoutGroupNestedInput = {
+    create?: XOR<InventoryCountCreateWithoutGroupInput, InventoryCountUncheckedCreateWithoutGroupInput> | InventoryCountCreateWithoutGroupInput[] | InventoryCountUncheckedCreateWithoutGroupInput[]
+    connectOrCreate?: InventoryCountCreateOrConnectWithoutGroupInput | InventoryCountCreateOrConnectWithoutGroupInput[]
+    upsert?: InventoryCountUpsertWithWhereUniqueWithoutGroupInput | InventoryCountUpsertWithWhereUniqueWithoutGroupInput[]
+    createMany?: InventoryCountCreateManyGroupInputEnvelope
+    set?: InventoryCountWhereUniqueInput | InventoryCountWhereUniqueInput[]
+    disconnect?: InventoryCountWhereUniqueInput | InventoryCountWhereUniqueInput[]
+    delete?: InventoryCountWhereUniqueInput | InventoryCountWhereUniqueInput[]
+    connect?: InventoryCountWhereUniqueInput | InventoryCountWhereUniqueInput[]
+    update?: InventoryCountUpdateWithWhereUniqueWithoutGroupInput | InventoryCountUpdateWithWhereUniqueWithoutGroupInput[]
+    updateMany?: InventoryCountUpdateManyWithWhereWithoutGroupInput | InventoryCountUpdateManyWithWhereWithoutGroupInput[]
+    deleteMany?: InventoryCountScalarWhereInput | InventoryCountScalarWhereInput[]
   }
 
   export type GroupCreateNestedOneWithoutBaselineProductsInput = {
@@ -6924,32 +6924,6 @@ export namespace Prisma {
     _max?: NestedBoolFilter<$PrismaModel>
   }
 
-  export type InventoryCountCreateWithoutGroupInput = {
-    id?: string
-    quantity: number
-    timestamp?: Date | string
-    isMismatch?: boolean
-    product: ProductCreateNestedOneWithoutCountsInput
-  }
-
-  export type InventoryCountUncheckedCreateWithoutGroupInput = {
-    id?: string
-    productId: string
-    quantity: number
-    timestamp?: Date | string
-    isMismatch?: boolean
-  }
-
-  export type InventoryCountCreateOrConnectWithoutGroupInput = {
-    where: InventoryCountWhereUniqueInput
-    create: XOR<InventoryCountCreateWithoutGroupInput, InventoryCountUncheckedCreateWithoutGroupInput>
-  }
-
-  export type InventoryCountCreateManyGroupInputEnvelope = {
-    data: InventoryCountCreateManyGroupInput | InventoryCountCreateManyGroupInput[]
-    skipDuplicates?: boolean
-  }
-
   export type ProductCreateWithoutBaselineGroupInput = {
     id?: string
     barcode: string
@@ -6978,32 +6952,30 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type InventoryCountUpsertWithWhereUniqueWithoutGroupInput = {
+  export type InventoryCountCreateWithoutGroupInput = {
+    id?: string
+    quantity: number
+    timestamp?: Date | string
+    isMismatch?: boolean
+    product: ProductCreateNestedOneWithoutCountsInput
+  }
+
+  export type InventoryCountUncheckedCreateWithoutGroupInput = {
+    id?: string
+    productId: string
+    quantity: number
+    timestamp?: Date | string
+    isMismatch?: boolean
+  }
+
+  export type InventoryCountCreateOrConnectWithoutGroupInput = {
     where: InventoryCountWhereUniqueInput
-    update: XOR<InventoryCountUpdateWithoutGroupInput, InventoryCountUncheckedUpdateWithoutGroupInput>
     create: XOR<InventoryCountCreateWithoutGroupInput, InventoryCountUncheckedCreateWithoutGroupInput>
   }
 
-  export type InventoryCountUpdateWithWhereUniqueWithoutGroupInput = {
-    where: InventoryCountWhereUniqueInput
-    data: XOR<InventoryCountUpdateWithoutGroupInput, InventoryCountUncheckedUpdateWithoutGroupInput>
-  }
-
-  export type InventoryCountUpdateManyWithWhereWithoutGroupInput = {
-    where: InventoryCountScalarWhereInput
-    data: XOR<InventoryCountUpdateManyMutationInput, InventoryCountUncheckedUpdateManyWithoutGroupInput>
-  }
-
-  export type InventoryCountScalarWhereInput = {
-    AND?: InventoryCountScalarWhereInput | InventoryCountScalarWhereInput[]
-    OR?: InventoryCountScalarWhereInput[]
-    NOT?: InventoryCountScalarWhereInput | InventoryCountScalarWhereInput[]
-    id?: StringFilter<"InventoryCount"> | string
-    productId?: StringFilter<"InventoryCount"> | string
-    groupId?: StringFilter<"InventoryCount"> | string
-    quantity?: IntFilter<"InventoryCount"> | number
-    timestamp?: DateTimeFilter<"InventoryCount"> | Date | string
-    isMismatch?: BoolFilter<"InventoryCount"> | boolean
+  export type InventoryCountCreateManyGroupInputEnvelope = {
+    data: InventoryCountCreateManyGroupInput | InventoryCountCreateManyGroupInput[]
+    skipDuplicates?: boolean
   }
 
   export type ProductUpsertWithWhereUniqueWithoutBaselineGroupInput = {
@@ -7032,6 +7004,34 @@ export namespace Prisma {
     baselineGroupId?: StringNullableFilter<"Product"> | string | null
     category?: StringNullableFilter<"Product"> | string | null
     price?: FloatNullableFilter<"Product"> | number | null
+  }
+
+  export type InventoryCountUpsertWithWhereUniqueWithoutGroupInput = {
+    where: InventoryCountWhereUniqueInput
+    update: XOR<InventoryCountUpdateWithoutGroupInput, InventoryCountUncheckedUpdateWithoutGroupInput>
+    create: XOR<InventoryCountCreateWithoutGroupInput, InventoryCountUncheckedCreateWithoutGroupInput>
+  }
+
+  export type InventoryCountUpdateWithWhereUniqueWithoutGroupInput = {
+    where: InventoryCountWhereUniqueInput
+    data: XOR<InventoryCountUpdateWithoutGroupInput, InventoryCountUncheckedUpdateWithoutGroupInput>
+  }
+
+  export type InventoryCountUpdateManyWithWhereWithoutGroupInput = {
+    where: InventoryCountScalarWhereInput
+    data: XOR<InventoryCountUpdateManyMutationInput, InventoryCountUncheckedUpdateManyWithoutGroupInput>
+  }
+
+  export type InventoryCountScalarWhereInput = {
+    AND?: InventoryCountScalarWhereInput | InventoryCountScalarWhereInput[]
+    OR?: InventoryCountScalarWhereInput[]
+    NOT?: InventoryCountScalarWhereInput | InventoryCountScalarWhereInput[]
+    id?: StringFilter<"InventoryCount"> | string
+    productId?: StringFilter<"InventoryCount"> | string
+    groupId?: StringFilter<"InventoryCount"> | string
+    quantity?: IntFilter<"InventoryCount"> | number
+    timestamp?: DateTimeFilter<"InventoryCount"> | Date | string
+    isMismatch?: BoolFilter<"InventoryCount"> | boolean
   }
 
   export type GroupCreateWithoutBaselineProductsInput = {
@@ -7216,14 +7216,6 @@ export namespace Prisma {
     baselineProducts?: ProductUncheckedUpdateManyWithoutBaselineGroupNestedInput
   }
 
-  export type InventoryCountCreateManyGroupInput = {
-    id?: string
-    productId: string
-    quantity: number
-    timestamp?: Date | string
-    isMismatch?: boolean
-  }
-
   export type ProductCreateManyBaselineGroupInput = {
     id?: string
     barcode: string
@@ -7232,28 +7224,12 @@ export namespace Prisma {
     price?: number | null
   }
 
-  export type InventoryCountUpdateWithoutGroupInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    quantity?: IntFieldUpdateOperationsInput | number
-    timestamp?: DateTimeFieldUpdateOperationsInput | Date | string
-    isMismatch?: BoolFieldUpdateOperationsInput | boolean
-    product?: ProductUpdateOneRequiredWithoutCountsNestedInput
-  }
-
-  export type InventoryCountUncheckedUpdateWithoutGroupInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    productId?: StringFieldUpdateOperationsInput | string
-    quantity?: IntFieldUpdateOperationsInput | number
-    timestamp?: DateTimeFieldUpdateOperationsInput | Date | string
-    isMismatch?: BoolFieldUpdateOperationsInput | boolean
-  }
-
-  export type InventoryCountUncheckedUpdateManyWithoutGroupInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    productId?: StringFieldUpdateOperationsInput | string
-    quantity?: IntFieldUpdateOperationsInput | number
-    timestamp?: DateTimeFieldUpdateOperationsInput | Date | string
-    isMismatch?: BoolFieldUpdateOperationsInput | boolean
+  export type InventoryCountCreateManyGroupInput = {
+    id?: string
+    productId: string
+    quantity: number
+    timestamp?: Date | string
+    isMismatch?: boolean
   }
 
   export type ProductUpdateWithoutBaselineGroupInput = {
@@ -7280,6 +7256,30 @@ export namespace Prisma {
     expectedQty?: NullableIntFieldUpdateOperationsInput | number | null
     category?: NullableStringFieldUpdateOperationsInput | string | null
     price?: NullableFloatFieldUpdateOperationsInput | number | null
+  }
+
+  export type InventoryCountUpdateWithoutGroupInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    quantity?: IntFieldUpdateOperationsInput | number
+    timestamp?: DateTimeFieldUpdateOperationsInput | Date | string
+    isMismatch?: BoolFieldUpdateOperationsInput | boolean
+    product?: ProductUpdateOneRequiredWithoutCountsNestedInput
+  }
+
+  export type InventoryCountUncheckedUpdateWithoutGroupInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    productId?: StringFieldUpdateOperationsInput | string
+    quantity?: IntFieldUpdateOperationsInput | number
+    timestamp?: DateTimeFieldUpdateOperationsInput | Date | string
+    isMismatch?: BoolFieldUpdateOperationsInput | boolean
+  }
+
+  export type InventoryCountUncheckedUpdateManyWithoutGroupInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    productId?: StringFieldUpdateOperationsInput | string
+    quantity?: IntFieldUpdateOperationsInput | number
+    timestamp?: DateTimeFieldUpdateOperationsInput | Date | string
+    isMismatch?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type InventoryCountCreateManyProductInput = {

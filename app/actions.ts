@@ -187,7 +187,7 @@ export async function getAllScansAction(): Promise<ActionResponse<{
       return {
         timestamp: count.timestamp,
         userName: count.group.name,
-        productName: count.product.name,
+        productName: count.product.barcode,
         quantity: count.quantity,
         isMismatch: count.isMismatch,
       };
@@ -253,10 +253,7 @@ export async function searchProductsAction(
   try {
     const products = await prisma.product.findMany({
       where: {
-        OR: [
-          { barcode: { contains: query.trim(), mode: "insensitive" } },
-          { name: { contains: query.trim(), mode: "insensitive" } },
-        ],
+        barcode: { contains: query.trim(), mode: "insensitive" },
       },
       take: 8,
     });

@@ -19,8 +19,8 @@ model Group {
   id               String           @id @default(cuid())
   name             String           @unique
   password         String
-  counts           InventoryCount[]
   baselineProducts Product[]        @relation("BaselineGroup")
+  counts           InventoryCount[]
 }
 
 model Product {

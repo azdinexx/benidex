@@ -13,7 +13,7 @@ export default function ScannerInterface() {
   const [quantity, setQuantity] = useState("1");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null);
-  const [lastScan, setLastScan] = useState<{ name: string, qty: number } | null>(null);
+  const [lastScan, setLastScan] = useState<{ barcode: string, qty: number } | null>(null);
   const [suggestions, setSuggestions] = useState<Product[]>([]);
   const [activeSuggestionIndex, setActiveSuggestionIndex] = useState(-1);
   const [showSuggestions, setShowSuggestions] = useState(false);
@@ -120,9 +120,9 @@ export default function ScannerInterface() {
       const result = await submitCountAction(formData);
 
       if (result.success && result.data) {
-        const productName = (result.data as any).product?.name || barcode;
-        setMessage({ type: 'success', text: `Scanned: ${productName} (${submitQty} units)` });
-        setLastScan({ name: productName, qty: submitQty });
+        const productBarcode = (result.data as any).product?.barcode || barcode;
+        setMessage({ type: 'success', text: `Scanned: ${productBarcode} (${submitQty} units)` });
+        setLastScan({ barcode: productBarcode, qty: submitQty });
         // Reset inputs
         setBarcode("");
         setQuantity("1");
@@ -195,7 +195,7 @@ export default function ScannerInterface() {
                       }`}
                   >
                     <div>
-                      <p className="font-semibold text-sm text-slate-800">{p.name}</p>
+                      <p className="font-semibold text-sm text-slate-800">{p.barcode}</p>
                       <p className="text-xs font-mono text-slate-400">{p.barcode}</p>
                     </div>
                     {p.category && (
@@ -290,7 +290,7 @@ export default function ScannerInterface() {
           <h3 className="text-xs font-bold text-slate-400 mb-3 uppercase tracking-wider">Last Scanned Item</h3>
           {lastScan ? (
             <div className="flex justify-between items-center bg-slate-50 p-4 rounded-xl border border-slate-100">
-              <span className="font-semibold text-slate-700 truncate mr-4">{lastScan.name}</span>
+              <span className="font-semibold text-slate-700 truncate mr-4">{lastScan.barcode}</span>
               <span className="text-blue-600 font-bold bg-blue-50 px-3 py-1 rounded-lg shrink-0">+{lastScan.qty}</span>
             </div>
           ) : (

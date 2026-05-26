@@ -20,7 +20,7 @@ model Group {
   name     String           @unique
   password String
   baselineProducts Product[] @relation("BaselineGroup")
-  baselineProducts Product[] @relation("BaselineGroup")
+  counts   InventoryCount[]
 }
 
 model Product {

@@ -7,10 +7,10 @@ import { Upload, FileSpreadsheet, Loader2, CheckCircle2, AlertCircle } from "luc
 type Product = {
   id: string;
   barcode: string;
-  name: string;
   expectedQty: number | null;
   category: string | null;
   price: number | null;
+  baselineGroupId: string | null;
 };
 
 export default function ProductsPageClient({ initialProducts }: { initialProducts: Product[] }) {
@@ -117,7 +117,7 @@ export default function ProductsPageClient({ initialProducts }: { initialProduct
                 {products.map((p) => (
                     <tr key={p.id} className="hover:bg-slate-50 transition-colors">
                       <td className="px-6 py-3 font-mono text-xs text-slate-500">{p.barcode}</td>
-                      <td className="px-6 py-3 font-medium text-slate-800">{p.name}</td>
+                      <td className="px-6 py-3 font-medium text-slate-800">{p.barcode}</td>
                       <td className="px-6 py-3 text-sm text-slate-500">{p.category || "—"}</td>
                       <td className="px-6 py-3 text-sm text-slate-500">{p.price !== null ? `$${p.price.toFixed(2)}` : "—"}</td>
                       <td className="px-6 py-3 text-sm">
