@@ -8,7 +8,7 @@ import bcrypt from "bcrypt";
 import { importProductsFromBuffer } from "./lib/excel-parser";
 import { revalidatePath } from "next/cache";
 
-// ─── Auth Helper ────────────────────────────────────────────────────────────
+// ─── Auth Helpers ────────────────────────────────────────────────────────────
 
 async function getAuthenticatedUser() {
   const session = await getServerSession(authOptions);
@@ -19,6 +19,13 @@ async function getAuthenticatedUser() {
     email: string;
     role: string;
   };
+}
+
+/** Returns the Group record for the currently authenticated group session. */
+async function getAuthenticatedGroup(): Promise<Group | null> {
+  const session = await getServerSession(authOptions);
+  if (!session?.user?.id || session.user.role !== "GROUP") return null;
+  return prisma.group.findUnique({ where: { id: session.user.id } });
 }
 
 // ─── Scan Action ─────────────────────────────────────────────────────────────
@@ -51,8 +58,9 @@ export async function submitCountAction(
   }
 
   try {
-    const authUser = await getAuthenticatedUser();
-    if (!authUser)
+    // Must be an authenticated Group — not an Admin
+    const group = await getAuthenticatedGroup();
+    if (!group)
       return { success: false, error: "Unauthorized: Please log in." };
 
     const product = await prisma.product.findUnique({
@@ -61,12 +69,11 @@ export async function submitCountAction(
     if (!product)
       return { success: false, error: "Product not found in database." };
 
-    // Baseline handling
+    // Baseline handling — first group to scan this product sets the expected qty
     if (product.expectedQty === null) {
-      // First group sets baseline
       await prisma.product.update({
         where: { id: product.id },
-        data: { expectedQty: quantity, baselineGroupId: authUser.id },
+        data: { expectedQty: quantity, baselineGroupId: group.id },
       });
     }
 
@@ -74,15 +81,15 @@ export async function submitCountAction(
     const newCount = await prisma.inventoryCount.create({
       data: {
         productId: product.id,
-        groupId: authUser.id,
+        groupId: group.id,
         quantity,
-        isMismatch: false, // temporary, will update later if needed
+        isMismatch: false, // temporary, updated below
         location,
       },
       include: { product: true },
     });
 
-    // Determine mismatch
+    // Determine mismatch against baseline
     let isMismatch = false;
     if (product.expectedQty !== null) {
       const total = await prisma.inventoryCount.aggregate({
@@ -90,8 +97,7 @@ export async function submitCountAction(
         _sum: { quantity: true },
       });
       const totalQty = total._sum?.quantity || 0;
-      const expected = product.expectedQty ?? 0;
-      isMismatch = totalQty !== expected;
+      isMismatch = totalQty !== product.expectedQty;
     }
 
     // Update count with final mismatch flag
@@ -207,7 +213,6 @@ export async function getAllScansAction(): Promise<
       return { success: false, error: "Unauthorized: Admins only." };
     }
 
-    // Fetch all counts
     const counts = await prisma.inventoryCount.findMany({
       include: {
         product: true,
@@ -216,22 +221,16 @@ export async function getAllScansAction(): Promise<
       orderBy: { timestamp: "desc" },
     });
 
-    const scans = counts.map((count) => {
-      return {
-        timestamp: count.timestamp,
-        userName: count.group.name,
-        productName: count.product.barcode,
-        quantity: count.quantity,
-        isMismatch: count.isMismatch,
-      };
-    });
+    const scans = counts.map((count) => ({
+      timestamp: count.timestamp,
+      userName: count.group.name,
+      productName: count.product.barcode,
+      quantity: count.quantity,
+      isMismatch: count.isMismatch,
+    }));
 
-    // Mismatches are now based on scans having isMismatch = true
     const mismatches = counts.filter((c) => c.isMismatch).length;
-    const totalCounted = counts.length; // Actually totalCounted previously summed quantity. Let's keep it summing quantity or just count the scans? "Total Items Scanned" -> total quantity. Let's sum quantity.
     const totalScannedQuantity = counts.reduce((s, c) => s + c.quantity, 0);
-
-    // Active groups count
     const uniqueGroupIds = new Set(counts.map((c) => c.groupId));
     const activeUsersCount = uniqueGroupIds.size;
 
@@ -244,7 +243,7 @@ export async function getAllScansAction(): Promise<
           mismatches,
           activeUsersCount,
         },
-        productCounts: {}, // Empty since monitor page doesn't need to recalculate it anymore
+        productCounts: {},
       },
     };
   } catch (e) {
@@ -252,9 +251,6 @@ export async function getAllScansAction(): Promise<
     return { success: false, error: "Failed to load scans." };
   }
 }
-
-// ─── User Actions ─────────────────────────────────────────────────────────────
-// Deprecated: Users do not exist anymore. We only use Admins and Groups.
 
 // ─── Product / Import Actions ─────────────────────────────────────────────────
 
@@ -325,14 +321,10 @@ export async function getGroupAccuracyStatsAction(): Promise<
     const result = [];
 
     for (const group of groups) {
-      // Compute total items inventoried
       const totalScanned = group.counts.reduce((sum, c) => sum + c.quantity, 0);
-
-      // Compute errors: any scan by the group that is a mismatch
       const errorsCount = group.counts.filter((c) => c.isMismatch).length;
 
-      // Exactitude formula: number of items inventoried / number of errors committed
-      let accuracyRatio = "100%"; // default if no errors
+      let accuracyRatio = "100%";
       if (errorsCount > 0) {
         const ratio = (totalScanned / errorsCount).toFixed(1);
         accuracyRatio = `${ratio} (items/error)`;
