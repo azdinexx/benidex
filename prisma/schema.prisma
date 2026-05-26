@@ -1,0 +1,46 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "./generated"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Admin {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  name      String
+  createdAt DateTime @default(now())
+}
+
+model Group {
+  id       String           @id @default(cuid())
+  name     String           @unique
+  password String
+  baselineProducts Product[] @relation("BaselineGroup")
+  baselineProducts Product[] @relation("BaselineGroup")
+}
+
+model Product {
+  id          String           @id @default(cuid())
+  barcode     String           @unique
+  expectedQty Int?  // Baseline quantity set by first group
+  baselineGroupId String?  // Group that set the baseline quantity
+  baselineGroup   Group?   @relation("BaselineGroup", fields: [baselineGroupId], references: [id])
+  category    String?
+  price       Float?
+  counts      InventoryCount[]
+}
+
+model InventoryCount {
+  id        String   @id @default(cuid())
+  productId String
+  product   Product  @relation(fields: [productId], references: [id])
+  groupId   String
+  group     Group    @relation(fields: [groupId], references: [id])
+  quantity  Int
+  timestamp DateTime @default(now())
+  isMismatch Boolean @default(false)
+}
