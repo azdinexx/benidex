@@ -32,12 +32,15 @@ export async function submitCountAction(
 > {
   const rawQty = formData.get("quantity");
   const rawBarcode = formData.get("barcode");
+  const location = formData.get("location") as string;
 
   if (
     !rawQty ||
     !rawBarcode ||
     typeof rawQty !== "string" ||
-    typeof rawBarcode !== "string"
+    typeof rawBarcode !== "string" ||
+    typeof location !== "string" ||
+    !location.match(/^[A-Z]-\d+-\d+$/)
   ) {
     return { success: false, error: "Invalid data submitted." };
   }
@@ -74,6 +77,7 @@ export async function submitCountAction(
         groupId: authUser.id,
         quantity,
         isMismatch: false, // temporary, will update later if needed
+        location,
       },
       include: { product: true },
     });

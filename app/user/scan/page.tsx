@@ -18,6 +18,9 @@ export default function ScannerInterface() {
   const [activeSuggestionIndex, setActiveSuggestionIndex] = useState(-1);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [isSearching, setIsSearching] = useState(false);
+  const [letter, setLetter] = useState("A");
+  const [column, setColumn] = useState("1");
+  const [floor, setFloor] = useState("1");
 
   const inputRef = useRef<HTMLInputElement>(null);
   const qtyInputRef = useRef<HTMLInputElement>(null);
@@ -103,6 +106,8 @@ export default function ScannerInterface() {
       const formData = new FormData();
       formData.append('barcode', barcode);
       formData.append('quantity', submitQty.toString());
+      formData.append('location', `${letter}-${column}-${floor}`);
+
 
       const result = await submitCountAction(formData);
 
@@ -112,6 +117,7 @@ export default function ScannerInterface() {
         setLastScan({ barcode: productBarcode, qty: submitQty });
         setBarcode("");
         setQuantity("1");
+        setLetter("A"); setColumn("1"); setFloor("1");
         inputRef.current?.focus();
       } else {
         setMessage({ type: 'error', text: result.error || 'Failed to scan' });
@@ -146,6 +152,40 @@ export default function ScannerInterface() {
         </div>
 
         <form onSubmit={handleScan} className="space-y-4">
+          {/* Location Input */}
+          <div className="space-y-1.5">
+            <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider">
+              Location
+            </label>
+            <div className="flex items-center gap-2 bg-white border-2 border-slate-200 rounded-2xl p-3 shadow-sm">
+              <select
+                value={letter}
+                onChange={(e) => setLetter(e.target.value)}
+                className="flex-1 text-center text-lg font-bold bg-slate-50 border border-slate-200 rounded-xl py-2 outline-none focus:border-blue-500"
+                disabled={isSubmitting}
+              >
+                {["A", "B", "C", "D"].map(l => <option key={l}>{l}</option>)}
+              </select>
+              <span className="text-slate-400 font-bold">-</span>
+              <input
+                type="number" min="1" max="100"
+                value={column}
+                onChange={(e) => setColumn(e.target.value)}
+                className="flex-1 text-center text-lg font-bold bg-slate-50 border border-slate-200 rounded-xl py-2 outline-none focus:border-blue-500"
+                disabled={isSubmitting}
+              />
+              <span className="text-slate-400 font-bold">-</span>
+              <select
+                value={floor}
+                onChange={(e) => setFloor(e.target.value)}
+                className="flex-1 text-center text-lg font-bold bg-slate-50 border border-slate-200 rounded-xl py-2 outline-none focus:border-blue-500"
+                disabled={isSubmitting}
+              >
+                {[1, 2, 3, 4, 5].map(f => <option key={f}>{f}</option>)}
+              </select>
+            </div>
+            <p className="text-xs text-slate-400 text-center font-mono">{letter}-{column}-{floor}</p>
+          </div>
           {/* Barcode Input */}
           <div className="relative" ref={suggestionContainerRef}>
             <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1.5">
@@ -260,8 +300,8 @@ export default function ScannerInterface() {
         {/* Status Message */}
         {message && (
           <div className={`p-3.5 sm:p-4 rounded-xl flex items-center gap-3 border transition-all ${message.type === 'success'
-              ? 'bg-green-50 border-green-200 text-green-700'
-              : 'bg-red-50 border-red-200 text-red-700'
+            ? 'bg-green-50 border-green-200 text-green-700'
+            : 'bg-red-50 border-red-200 text-red-700'
             }`}>
             {message.type === 'success'
               ? <CheckCircle2 className="w-5 h-5 sm:w-6 sm:h-6 text-green-500 shrink-0" />

@@ -16,31 +16,32 @@ model Admin {
 }
 
 model Group {
-  id       String           @id @default(cuid())
-  name     String           @unique
-  password String
-  baselineProducts Product[] @relation("BaselineGroup")
-  counts   InventoryCount[]
+  id               String           @id @default(cuid())
+  name             String           @unique
+  password         String
+  baselineProducts Product[]        @relation("BaselineGroup")
+  counts           InventoryCount[]
 }
 
 model Product {
-  id          String           @id @default(cuid())
-  barcode     String           @unique
-  expectedQty Int?  // Baseline quantity set by first group
-  baselineGroupId String?  // Group that set the baseline quantity
-  baselineGroup   Group?   @relation("BaselineGroup", fields: [baselineGroupId], references: [id])
-  category    String?
-  price       Float?
-  counts      InventoryCount[]
+  id              String           @id @default(cuid())
+  barcode         String           @unique
+  expectedQty     Int? // Baseline quantity set by first group
+  baselineGroupId String? // Group that set the baseline quantity
+  baselineGroup   Group?           @relation("BaselineGroup", fields: [baselineGroupId], references: [id])
+  category        String?
+  price           Float?
+  counts          InventoryCount[]
 }
 
 model InventoryCount {
-  id        String   @id @default(cuid())
-  productId String
-  product   Product  @relation(fields: [productId], references: [id])
-  groupId   String
-  group     Group    @relation(fields: [groupId], references: [id])
-  quantity  Int
-  timestamp DateTime @default(now())
-  isMismatch Boolean @default(false)
+  id         String   @id @default(cuid())
+  productId  String
+  product    Product  @relation(fields: [productId], references: [id])
+  groupId    String
+  group      Group    @relation(fields: [groupId], references: [id])
+  quantity   Int
+  location   String
+  timestamp  DateTime @default(now())
+  isMismatch Boolean  @default(false)
 }
