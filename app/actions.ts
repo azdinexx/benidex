@@ -35,7 +35,9 @@ async function getAuthenticatedGroup(): Promise<Group | null> {
 
 // ─── Scan Action ─────────────────────────────────────────────────────────────
 
-export async function recalculateMismatchesForProduct(productId: string): Promise<void> {
+export async function recalculateMismatchesForProduct(
+  productId: string,
+): Promise<void> {
   const product = await prisma.product.findUnique({
     where: { id: productId },
     include: { counts: true },
@@ -46,7 +48,9 @@ export async function recalculateMismatchesForProduct(productId: string): Promis
   // 1. If product has no baseline qty yet but counts exist:
   if (product.qty === null && product.counts.length > 0) {
     // Find the earliest count to set as the baseline
-    const sorted = [...product.counts].sort((a, b) => a.timestamp.getTime() - b.timestamp.getTime());
+    const sorted = [...product.counts].sort(
+      (a, b) => a.timestamp.getTime() - b.timestamp.getTime(),
+    );
     const earliest = sorted[0];
     await prisma.product.update({
       where: { id: productId },
@@ -61,53 +65,64 @@ export async function recalculateMismatchesForProduct(productId: string): Promis
   }
 
   // 2. Determine mismatch statuses for all counts
-  if (product.qty !== null) {
-    if (product.adminCorrected) {
-      // If admin has corrected the count, all current counts are marked as correct (discrepancy resolved)
-      for (const count of product.counts) {
-        if (count.isMismatch || count.mismatchType !== MismatchType.UNKNOWN) {
-          await prisma.inventoryCount.update({
-            where: { id: count.id },
-            data: {
-              isMismatch: false,
-              mismatchType: MismatchType.UNKNOWN,
-            },
-          });
-        }
+  if (product.adminCorrected) {
+    // If admin has corrected the count, all current counts are marked as correct
+    for (const count of product.counts) {
+      if (count.isMismatch || count.mismatchType !== MismatchType.UNKNOWN) {
+        await prisma.inventoryCount.update({
+          where: { id: count.id },
+          data: {
+            isMismatch: false,
+            mismatchType: MismatchType.UNKNOWN,
+          },
+        });
       }
-    } else {
-      // Find the baseline count (the earliest count by the baseline group)
-      const baselineCounts = product.counts.filter(c => c.groupId === product.baselineGroupId);
-      const baselineCount = baselineCounts.length > 0
-        ? [...baselineCounts].sort((a, b) => a.timestamp.getTime() - b.timestamp.getTime())[0]
-        : null;
+    }
+  } else {
+    // Sort all counts chronologically to determine "first count per location"
+    const sortedCounts = [...product.counts].sort(
+      (a, b) => a.timestamp.getTime() - b.timestamp.getTime(),
+    );
 
-      const baselineLocation = baselineCount ? baselineCount.location : null;
+    // Build a map: location → { quantity, groupId } of the FIRST count at that location
+    const locationReference = new Map<
+      string,
+      { quantity: number; groupId: string; countId: string }
+    >();
+    for (const count of sortedCounts) {
+      if (!locationReference.has(count.location)) {
+        locationReference.set(count.location, {
+          quantity: count.quantity,
+          groupId: count.groupId,
+          countId: count.id,
+        });
+      }
+    }
 
-      for (const count of product.counts) {
-        let isMismatch = false;
-        let mismatchType: MismatchType = MismatchType.UNKNOWN;
+    for (const count of product.counts) {
+      let isMismatch = false;
+      let mismatchType: MismatchType = MismatchType.UNKNOWN;
 
-        if (baselineCount && count.id === baselineCount.id) {
-          // The baseline count itself is never a mismatch
-          isMismatch = false;
-          mismatchType = MismatchType.UNKNOWN;
-        } else {
-          if (count.quantity !== product.qty) {
-            isMismatch = true;
-            mismatchType = MismatchType.QUANTITY_MISMATCH;
-          } else if (baselineLocation && count.location !== baselineLocation) {
-            isMismatch = true;
-            mismatchType = MismatchType.LOCATION_MISMATCH;
-          }
-        }
+      const ref = locationReference.get(count.location);
 
-        if (count.isMismatch !== isMismatch || count.mismatchType !== mismatchType) {
-          await prisma.inventoryCount.update({
-            where: { id: count.id },
-            data: { isMismatch, mismatchType },
-          });
-        }
+      if (ref && count.id === ref.countId) {
+        // This is the first (reference) count for its location — never a mismatch
+        isMismatch = false;
+        mismatchType = MismatchType.UNKNOWN;
+      } else if (ref && count.quantity !== ref.quantity) {
+        // A later group counted the same product at the same location with a different quantity
+        isMismatch = true;
+        mismatchType = MismatchType.QUANTITY_MISMATCH;
+      }
+
+      if (
+        count.isMismatch !== isMismatch ||
+        count.mismatchType !== mismatchType
+      ) {
+        await prisma.inventoryCount.update({
+          where: { id: count.id },
+          data: { isMismatch, mismatchType },
+        });
       }
     }
   }
@@ -153,6 +168,23 @@ export async function submitCountAction(
 
     if (!product)
       return { success: false, error: "Product not found in database." };
+
+    // Check if this group already counted this product at this location
+    const existingCount = await prisma.inventoryCount.findFirst({
+      where: {
+        productId: product.id,
+        groupId: group.id,
+        location,
+      },
+    });
+
+    if (existingCount) {
+      return {
+        success: false,
+        error:
+          "You already counted this product at this location. Go to My Scan History to edit your count.",
+      };
+    }
 
     // Create the count entry
     const newCount = await prisma.inventoryCount.create({
@@ -242,7 +274,10 @@ export async function editCountAction(
     }
 
     if (count.groupId !== group.id) {
-      return { success: false, error: "Unauthorized: You do not own this count." };
+      return {
+        success: false,
+        error: "Unauthorized: You do not own this count.",
+      };
     }
 
     // Update the count
@@ -297,7 +332,12 @@ export async function correctMismatchAction(
   const productId = formData.get("productId") as string;
   const rawQty = formData.get("correctQuantity");
 
-  if (!productId || typeof productId !== "string" || !rawQty || typeof rawQty !== "string") {
+  if (
+    !productId ||
+    typeof productId !== "string" ||
+    !rawQty ||
+    typeof rawQty !== "string"
+  ) {
     return { success: false, error: "Invalid data submitted." };
   }
 
@@ -340,9 +380,7 @@ export async function correctMismatchAction(
   }
 }
 
-export async function getProductCountsAction(
-  productId: string,
-): Promise<
+export async function getProductCountsAction(productId: string): Promise<
   ActionResponse<
     Array<{
       id: string;
@@ -367,7 +405,7 @@ export async function getProductCountsAction(
       orderBy: { timestamp: "asc" },
     });
 
-    const data = counts.map(c => ({
+    const data = counts.map((c) => ({
       id: c.id,
       groupName: c.group.name,
       quantity: c.quantity,
