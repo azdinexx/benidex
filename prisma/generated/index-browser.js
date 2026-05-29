@@ -137,10 +137,11 @@ exports.Prisma.GroupScalarFieldEnum = {
 exports.Prisma.ProductScalarFieldEnum = {
   id: 'id',
   barcode: 'barcode',
-  expectedQty: 'expectedQty',
+  qty: 'qty',
   baselineGroupId: 'baselineGroupId',
   category: 'category',
-  price: 'price'
+  price: 'price',
+  adminCorrected: 'adminCorrected'
 };
 
 exports.Prisma.InventoryCountScalarFieldEnum = {
@@ -150,7 +151,8 @@ exports.Prisma.InventoryCountScalarFieldEnum = {
   quantity: 'quantity',
   location: 'location',
   timestamp: 'timestamp',
-  isMismatch: 'isMismatch'
+  isMismatch: 'isMismatch',
+  mismatchType: 'mismatchType'
 };
 
 exports.Prisma.SortOrder = {
@@ -167,7 +169,11 @@ exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
 };
-
+exports.MismatchType = exports.$Enums.MismatchType = {
+  UNKNOWN: 'UNKNOWN',
+  QUANTITY_MISMATCH: 'QUANTITY_MISMATCH',
+  LOCATION_MISMATCH: 'LOCATION_MISMATCH'
+};
 
 exports.Prisma.ModelName = {
   Admin: 'Admin',

@@ -26,22 +26,30 @@ model Group {
 model Product {
   id              String           @id @default(cuid())
   barcode         String           @unique
-  expectedQty     Int? // Baseline quantity set by first group
+  qty             Int? // Baseline quantity set by first group
   baselineGroupId String? // Group that set the baseline quantity
   baselineGroup   Group?           @relation("BaselineGroup", fields: [baselineGroupId], references: [id])
   category        String?
   price           Float?
   counts          InventoryCount[]
+  adminCorrected  Boolean          @default(false)
 }
 
 model InventoryCount {
-  id         String   @id @default(cuid())
-  productId  String
-  product    Product  @relation(fields: [productId], references: [id])
-  groupId    String
-  group      Group    @relation(fields: [groupId], references: [id])
-  quantity   Int
-  location   String
-  timestamp  DateTime @default(now())
-  isMismatch Boolean  @default(false)
+  id           String       @id @default(cuid())
+  productId    String
+  product      Product      @relation(fields: [productId], references: [id])
+  groupId      String
+  group        Group        @relation(fields: [groupId], references: [id])
+  quantity     Int
+  location     String
+  timestamp    DateTime     @default(now())
+  isMismatch   Boolean      @default(false)
+  mismatchType MismatchType @default(UNKNOWN)
+}
+
+enum MismatchType {
+  UNKNOWN
+  QUANTITY_MISMATCH
+  LOCATION_MISMATCH
 }

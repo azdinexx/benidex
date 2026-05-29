@@ -7,7 +7,7 @@ import { Upload, FileSpreadsheet, Loader2, CheckCircle2, AlertCircle } from "luc
 type Product = {
   id: string;
   barcode: string;
-  expectedQty: number | null;
+  qty: number | null;
   category: string | null;
   price: number | null;
   baselineGroupId: string | null;
@@ -87,9 +87,8 @@ export default function ProductsPageClient({ initialProducts }: { initialProduct
         </form>
 
         {importStatus && (
-          <div className={`mt-4 flex items-center gap-2 p-3 rounded-xl text-sm font-medium ${
-            importStatus.type === "success" ? "bg-green-50 text-green-700 border border-green-200" : "bg-red-50 text-red-700 border border-red-200"
-          }`}>
+          <div className={`mt-4 flex items-center gap-2 p-3 rounded-xl text-sm font-medium ${importStatus.type === "success" ? "bg-green-50 text-green-700 border border-green-200" : "bg-red-50 text-red-700 border border-red-200"
+            }`}>
             {importStatus.type === "success" ? <CheckCircle2 size={16} /> : <AlertCircle size={16} />}
             {importStatus.message}
           </div>
@@ -115,19 +114,19 @@ export default function ProductsPageClient({ initialProducts }: { initialProduct
               </thead>
               <tbody className="divide-y divide-slate-100">
                 {products.map((p) => (
-                    <tr key={p.id} className="hover:bg-slate-50 transition-colors">
-                      <td className="px-6 py-3 font-mono text-xs text-slate-500">{p.barcode}</td>
-                      <td className="px-6 py-3 font-medium text-slate-800">{p.barcode}</td>
-                      <td className="px-6 py-3 text-sm text-slate-500">{p.category || "—"}</td>
-                      <td className="px-6 py-3 text-sm text-slate-500">{p.price !== null ? `$${p.price.toFixed(2)}` : "—"}</td>
-                      <td className="px-6 py-3 text-sm">
-                        {p.expectedQty !== null ? (
-                          <span className="font-mono font-semibold text-slate-900">{p.expectedQty}</span>
-                        ) : (
-                          <span className="italic text-slate-400">Uncounted</span>
-                        )}
-                      </td>
-                    </tr>
+                  <tr key={p.id} className="hover:bg-slate-50 transition-colors">
+                    <td className="px-6 py-3 font-mono text-xs text-slate-500">{p.barcode}</td>
+                    <td className="px-6 py-3 font-medium text-slate-800">{p.barcode}</td>
+                    <td className="px-6 py-3 text-sm text-slate-500">{p.category || "—"}</td>
+                    <td className="px-6 py-3 text-sm text-slate-500">{p.price !== null ? `$${p.price.toFixed(2)}` : "—"}</td>
+                    <td className="px-6 py-3 text-sm">
+                      {p.qty !== null ? (
+                        <span className="font-mono font-semibold text-slate-900">{p.qty}</span>
+                      ) : (
+                        <span className="italic text-slate-400">Uncounted</span>
+                      )}
+                    </td>
+                  </tr>
                 ))}
               </tbody>
             </table>

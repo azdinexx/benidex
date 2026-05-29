@@ -35,6 +35,24 @@ export type Product = $Result.DefaultSelection<Prisma.$ProductPayload>
 export type InventoryCount = $Result.DefaultSelection<Prisma.$InventoryCountPayload>
 
 /**
+ * Enums
+ */
+export namespace $Enums {
+  export const MismatchType: {
+  UNKNOWN: 'UNKNOWN',
+  QUANTITY_MISMATCH: 'QUANTITY_MISMATCH',
+  LOCATION_MISMATCH: 'LOCATION_MISMATCH'
+};
+
+export type MismatchType = (typeof MismatchType)[keyof typeof MismatchType]
+
+}
+
+export type MismatchType = $Enums.MismatchType
+
+export const MismatchType: typeof $Enums.MismatchType
+
+/**
  * ##  Prisma Client ʲˢ
  *
  * Type-safe database client for TypeScript & Node.js
@@ -3299,79 +3317,85 @@ export namespace Prisma {
   }
 
   export type ProductAvgAggregateOutputType = {
-    expectedQty: number | null
+    qty: number | null
     price: number | null
   }
 
   export type ProductSumAggregateOutputType = {
-    expectedQty: number | null
+    qty: number | null
     price: number | null
   }
 
   export type ProductMinAggregateOutputType = {
     id: string | null
     barcode: string | null
-    expectedQty: number | null
+    qty: number | null
     baselineGroupId: string | null
     category: string | null
     price: number | null
+    adminCorrected: boolean | null
   }
 
   export type ProductMaxAggregateOutputType = {
     id: string | null
     barcode: string | null
-    expectedQty: number | null
+    qty: number | null
     baselineGroupId: string | null
     category: string | null
     price: number | null
+    adminCorrected: boolean | null
   }
 
   export type ProductCountAggregateOutputType = {
     id: number
     barcode: number
-    expectedQty: number
+    qty: number
     baselineGroupId: number
     category: number
     price: number
+    adminCorrected: number
     _all: number
   }
 
 
   export type ProductAvgAggregateInputType = {
-    expectedQty?: true
+    qty?: true
     price?: true
   }
 
   export type ProductSumAggregateInputType = {
-    expectedQty?: true
+    qty?: true
     price?: true
   }
 
   export type ProductMinAggregateInputType = {
     id?: true
     barcode?: true
-    expectedQty?: true
+    qty?: true
     baselineGroupId?: true
     category?: true
     price?: true
+    adminCorrected?: true
   }
 
   export type ProductMaxAggregateInputType = {
     id?: true
     barcode?: true
-    expectedQty?: true
+    qty?: true
     baselineGroupId?: true
     category?: true
     price?: true
+    adminCorrected?: true
   }
 
   export type ProductCountAggregateInputType = {
     id?: true
     barcode?: true
-    expectedQty?: true
+    qty?: true
     baselineGroupId?: true
     category?: true
     price?: true
+    adminCorrected?: true
     _all?: true
   }
 
@@ -3464,10 +3488,11 @@ export namespace Prisma {
   export type ProductGroupByOutputType = {
     id: string
     barcode: string
-    expectedQty: number | null
+    qty: number | null
     baselineGroupId: string | null
     category: string | null
     price: number | null
+    adminCorrected: boolean
     _count: ProductCountAggregateOutputType | null
     _avg: ProductAvgAggregateOutputType | null
     _sum: ProductSumAggregateOutputType | null
@@ -3492,10 +3517,11 @@ export namespace Prisma {
   export type ProductSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     barcode?: boolean
-    expectedQty?: boolean
+    qty?: boolean
     baselineGroupId?: boolean
     category?: boolean
     price?: boolean
+    adminCorrected?: boolean
     baselineGroup?: boolean | Product$baselineGroupArgs<ExtArgs>
     counts?: boolean | Product$countsArgs<ExtArgs>
     _count?: boolean | ProductCountOutputTypeDefaultArgs<ExtArgs>
@@ -3504,33 +3530,36 @@ export namespace Prisma {
   export type ProductSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     barcode?: boolean
-    expectedQty?: boolean
+    qty?: boolean
     baselineGroupId?: boolean
     category?: boolean
     price?: boolean
+    adminCorrected?: boolean
     baselineGroup?: boolean | Product$baselineGroupArgs<ExtArgs>
   }, ExtArgs["result"]["product"]>
 
   export type ProductSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     barcode?: boolean
-    expectedQty?: boolean
+    qty?: boolean
     baselineGroupId?: boolean
     category?: boolean
     price?: boolean
+    adminCorrected?: boolean
     baselineGroup?: boolean | Product$baselineGroupArgs<ExtArgs>
   }, ExtArgs["result"]["product"]>
 
   export type ProductSelectScalar = {
     id?: boolean
     barcode?: boolean
-    expectedQty?: boolean
+    qty?: boolean
     baselineGroupId?: boolean
     category?: boolean
     price?: boolean
+    adminCorrected?: boolean
   }
 
-  export type ProductOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "barcode" | "expectedQty" | "baselineGroupId" | "category" | "price", ExtArgs["result"]["product"]>
+  export type ProductOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "barcode" | "qty" | "baselineGroupId" | "category" | "price" | "adminCorrected", ExtArgs["result"]["product"]>
   export type ProductInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     baselineGroup?: boolean | Product$baselineGroupArgs<ExtArgs>
     counts?: boolean | Product$countsArgs<ExtArgs>
@@ -3552,10 +3581,11 @@ export namespace Prisma {
     scalars: $Extensions.GetPayloadResult<{
       id: string
       barcode: string
-      expectedQty: number | null
+      qty: number | null
       baselineGroupId: string | null
       category: string | null
       price: number | null
+      adminCorrected: boolean
     }, ExtArgs["result"]["product"]>
     composites: {}
   }
@@ -3983,10 +4013,11 @@ export namespace Prisma {
   interface ProductFieldRefs {
     readonly id: FieldRef<"Product", 'String'>
     readonly barcode: FieldRef<"Product", 'String'>
-    readonly expectedQty: FieldRef<"Product", 'Int'>
+    readonly qty: FieldRef<"Product", 'Int'>
     readonly baselineGroupId: FieldRef<"Product", 'String'>
     readonly category: FieldRef<"Product", 'String'>
     readonly price: FieldRef<"Product", 'Float'>
+    readonly adminCorrected: FieldRef<"Product", 'Boolean'>
   }
     
 
@@ -4477,6 +4508,7 @@ export namespace Prisma {
     location: string | null
     timestamp: Date | null
     isMismatch: boolean | null
+    mismatchType: $Enums.MismatchType | null
   }
 
   export type InventoryCountMaxAggregateOutputType = {
@@ -4487,6 +4519,7 @@ export namespace Prisma {
     location: string | null
     timestamp: Date | null
     isMismatch: boolean | null
+    mismatchType: $Enums.MismatchType | null
   }
 
   export type InventoryCountCountAggregateOutputType = {
@@ -4497,6 +4530,7 @@ export namespace Prisma {
     location: number
     timestamp: number
     isMismatch: number
+    mismatchType: number
     _all: number
   }
 
@@ -4517,6 +4551,7 @@ export namespace Prisma {
     location?: true
     timestamp?: true
     isMismatch?: true
+    mismatchType?: true
   }
 
   export type InventoryCountMaxAggregateInputType = {
@@ -4527,6 +4562,7 @@ export namespace Prisma {
     location?: true
     timestamp?: true
     isMismatch?: true
+    mismatchType?: true
   }
 
   export type InventoryCountCountAggregateInputType = {
@@ -4537,6 +4573,7 @@ export namespace Prisma {
     location?: true
     timestamp?: true
     isMismatch?: true
+    mismatchType?: true
     _all?: true
   }
 
@@ -4634,6 +4671,7 @@ export namespace Prisma {
     location: string
     timestamp: Date
     isMismatch: boolean
+    mismatchType: $Enums.MismatchType
     _count: InventoryCountCountAggregateOutputType | null
     _avg: InventoryCountAvgAggregateOutputType | null
     _sum: InventoryCountSumAggregateOutputType | null
@@ -4663,6 +4701,7 @@ export namespace Prisma {
     location?: boolean
     timestamp?: boolean
     isMismatch?: boolean
+    mismatchType?: boolean
     product?: boolean | ProductDefaultArgs<ExtArgs>
     group?: boolean | GroupDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["inventoryCount"]>
@@ -4675,6 +4714,7 @@ export namespace Prisma {
     location?: boolean
     timestamp?: boolean
     isMismatch?: boolean
+    mismatchType?: boolean
     product?: boolean | ProductDefaultArgs<ExtArgs>
     group?: boolean | GroupDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["inventoryCount"]>
@@ -4687,6 +4727,7 @@ export namespace Prisma {
     location?: boolean
     timestamp?: boolean
     isMismatch?: boolean
+    mismatchType?: boolean
     product?: boolean | ProductDefaultArgs<ExtArgs>
     group?: boolean | GroupDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["inventoryCount"]>
@@ -4699,9 +4740,10 @@ export namespace Prisma {
     location?: boolean
     timestamp?: boolean
     isMismatch?: boolean
+    mismatchType?: boolean
   }
 
-  export type InventoryCountOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "productId" | "groupId" | "quantity" | "location" | "timestamp" | "isMismatch", ExtArgs["result"]["inventoryCount"]>
+  export type InventoryCountOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "productId" | "groupId" | "quantity" | "location" | "timestamp" | "isMismatch" | "mismatchType", ExtArgs["result"]["inventoryCount"]>
   export type InventoryCountInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     product?: boolean | ProductDefaultArgs<ExtArgs>
     group?: boolean | GroupDefaultArgs<ExtArgs>
@@ -4729,6 +4771,7 @@ export namespace Prisma {
       location: string
       timestamp: Date
       isMismatch: boolean
+      mismatchType: $Enums.MismatchType
     }, ExtArgs["result"]["inventoryCount"]>
     composites: {}
   }
@@ -5161,6 +5204,7 @@ export namespace Prisma {
     readonly location: FieldRef<"InventoryCount", 'String'>
     readonly timestamp: FieldRef<"InventoryCount", 'DateTime'>
     readonly isMismatch: FieldRef<"InventoryCount", 'Boolean'>
+    readonly mismatchType: FieldRef<"InventoryCount", 'MismatchType'>
   }
     
 
@@ -5617,10 +5661,11 @@ export namespace Prisma {
   export const ProductScalarFieldEnum: {
     id: 'id',
     barcode: 'barcode',
-    expectedQty: 'expectedQty',
+    qty: 'qty',
     baselineGroupId: 'baselineGroupId',
     category: 'category',
-    price: 'price'
+    price: 'price',
+    adminCorrected: 'adminCorrected'
   };
 
   export type ProductScalarFieldEnum = (typeof ProductScalarFieldEnum)[keyof typeof ProductScalarFieldEnum]
@@ -5633,7 +5678,8 @@ export namespace Prisma {
     quantity: 'quantity',
     location: 'location',
     timestamp: 'timestamp',
-    isMismatch: 'isMismatch'
+    isMismatch: 'isMismatch',
+    mismatchType: 'mismatchType'
   };
 
   export type InventoryCountScalarFieldEnum = (typeof InventoryCountScalarFieldEnum)[keyof typeof InventoryCountScalarFieldEnum]
@@ -5728,6 +5774,20 @@ export namespace Prisma {
    * Reference to a field of type 'Boolean'
    */
   export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+    
+
+
+  /**
+   * Reference to a field of type 'MismatchType'
+   */
+  export type EnumMismatchTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MismatchType'>
+    
+
+
+  /**
+   * Reference to a field of type 'MismatchType[]'
+   */
+  export type ListEnumMismatchTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MismatchType[]'>
     
   /**
    * Deep Input Types
@@ -5840,10 +5900,11 @@ export namespace Prisma {
     NOT?: ProductWhereInput | ProductWhereInput[]
     id?: StringFilter<"Product"> | string
     barcode?: StringFilter<"Product"> | string
-    expectedQty?: IntNullableFilter<"Product"> | number | null
+    qty?: IntNullableFilter<"Product"> | number | null
     baselineGroupId?: StringNullableFilter<"Product"> | string | null
     category?: StringNullableFilter<"Product"> | string | null
     price?: FloatNullableFilter<"Product"> | number | null
+    adminCorrected?: BoolFilter<"Product"> | boolean
     baselineGroup?: XOR<GroupNullableScalarRelationFilter, GroupWhereInput> | null
     counts?: InventoryCountListRelationFilter
   }
@@ -5851,10 +5912,11 @@ export namespace Prisma {
   export type ProductOrderByWithRelationInput = {
     id?: SortOrder
     barcode?: SortOrder
-    expectedQty?: SortOrderInput | SortOrder
+    qty?: SortOrderInput | SortOrder
     baselineGroupId?: SortOrderInput | SortOrder
     category?: SortOrderInput | SortOrder
     price?: SortOrderInput | SortOrder
+    adminCorrected?: SortOrder
     baselineGroup?: GroupOrderByWithRelationInput
     counts?: InventoryCountOrderByRelationAggregateInput
   }
@@ -5865,10 +5927,11 @@ export namespace Prisma {
     AND?: ProductWhereInput | ProductWhereInput[]
     OR?: ProductWhereInput[]
     NOT?: ProductWhereInput | ProductWhereInput[]
-    expectedQty?: IntNullableFilter<"Product"> | number | null
+    qty?: IntNullableFilter<"Product"> | number | null
     baselineGroupId?: StringNullableFilter<"Product"> | string | null
     category?: StringNullableFilter<"Product"> | string | null
     price?: FloatNullableFilter<"Product"> | number | null
+    adminCorrected?: BoolFilter<"Product"> | boolean
     baselineGroup?: XOR<GroupNullableScalarRelationFilter, GroupWhereInput> | null
     counts?: InventoryCountListRelationFilter
   }, "id" | "barcode">
@@ -5876,10 +5939,11 @@ export namespace Prisma {
   export type ProductOrderByWithAggregationInput = {
     id?: SortOrder
     barcode?: SortOrder
-    expectedQty?: SortOrderInput | SortOrder
+    qty?: SortOrderInput | SortOrder
     baselineGroupId?: SortOrderInput | SortOrder
     category?: SortOrderInput | SortOrder
     price?: SortOrderInput | SortOrder
+    adminCorrected?: SortOrder
     _count?: ProductCountOrderByAggregateInput
     _avg?: ProductAvgOrderByAggregateInput
     _max?: ProductMaxOrderByAggregateInput
@@ -5893,10 +5957,11 @@ export namespace Prisma {
     NOT?: ProductScalarWhereWithAggregatesInput | ProductScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"Product"> | string
     barcode?: StringWithAggregatesFilter<"Product"> | string
-    expectedQty?: IntNullableWithAggregatesFilter<"Product"> | number | null
+    qty?: IntNullableWithAggregatesFilter<"Product"> | number | null
     baselineGroupId?: StringNullableWithAggregatesFilter<"Product"> | string | null
     category?: StringNullableWithAggregatesFilter<"Product"> | string | null
     price?: FloatNullableWithAggregatesFilter<"Product"> | number | null
+    adminCorrected?: BoolWithAggregatesFilter<"Product"> | boolean
   }
 
   export type InventoryCountWhereInput = {
@@ -5910,6 +5975,7 @@ export namespace Prisma {
     location?: StringFilter<"InventoryCount"> | string
     timestamp?: DateTimeFilter<"InventoryCount"> | Date | string
     isMismatch?: BoolFilter<"InventoryCount"> | boolean
+    mismatchType?: EnumMismatchTypeFilter<"InventoryCount"> | $Enums.MismatchType
     product?: XOR<ProductScalarRelationFilter, ProductWhereInput>
     group?: XOR<GroupScalarRelationFilter, GroupWhereInput>
   }
@@ -5922,6 +5988,7 @@ export namespace Prisma {
     location?: SortOrder
     timestamp?: SortOrder
     isMismatch?: SortOrder
+    mismatchType?: SortOrder
     product?: ProductOrderByWithRelationInput
     group?: GroupOrderByWithRelationInput
   }
@@ -5937,6 +6004,7 @@ export namespace Prisma {
     location?: StringFilter<"InventoryCount"> | string
     timestamp?: DateTimeFilter<"InventoryCount"> | Date | string
     isMismatch?: BoolFilter<"InventoryCount"> | boolean
+    mismatchType?: EnumMismatchTypeFilter<"InventoryCount"> | $Enums.MismatchType
     product?: XOR<ProductScalarRelationFilter, ProductWhereInput>
     group?: XOR<GroupScalarRelationFilter, GroupWhereInput>
   }, "id">
@@ -5949,6 +6017,7 @@ export namespace Prisma {
     location?: SortOrder
     timestamp?: SortOrder
     isMismatch?: SortOrder
+    mismatchType?: SortOrder
     _count?: InventoryCountCountOrderByAggregateInput
     _avg?: InventoryCountAvgOrderByAggregateInput
     _max?: InventoryCountMaxOrderByAggregateInput
@@ -5967,6 +6036,7 @@ export namespace Prisma {
     location?: StringWithAggregatesFilter<"InventoryCount"> | string
     timestamp?: DateTimeWithAggregatesFilter<"InventoryCount"> | Date | string
     isMismatch?: BoolWithAggregatesFilter<"InventoryCount"> | boolean
+    mismatchType?: EnumMismatchTypeWithAggregatesFilter<"InventoryCount"> | $Enums.MismatchType
   }
 
   export type AdminCreateInput = {
@@ -6078,9 +6148,10 @@ export namespace Prisma {
   export type ProductCreateInput = {
     id?: string
     barcode: string
-    expectedQty?: number | null
+    qty?: number | null
     category?: string | null
     price?: number | null
+    adminCorrected?: boolean
     baselineGroup?: GroupCreateNestedOneWithoutBaselineProductsInput
     counts?: InventoryCountCreateNestedManyWithoutProductInput
   }
@@ -6088,19 +6159,21 @@ export namespace Prisma {
   export type ProductUncheckedCreateInput = {
     id?: string
     barcode: string
-    expectedQty?: number | null
+    qty?: number | null
     baselineGroupId?: string | null
     category?: string | null
     price?: number | null
+    adminCorrected?: boolean
     counts?: InventoryCountUncheckedCreateNestedManyWithoutProductInput
   }
 
   export type ProductUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     barcode?: StringFieldUpdateOperationsInput | string
-    expectedQty?: NullableIntFieldUpdateOperationsInput | number | null
+    qty?: NullableIntFieldUpdateOperationsInput | number | null
     category?: NullableStringFieldUpdateOperationsInput | string | null
     price?: NullableFloatFieldUpdateOperationsInput | number | null
+    adminCorrected?: BoolFieldUpdateOperationsInput | boolean
     baselineGroup?: GroupUpdateOneWithoutBaselineProductsNestedInput
     counts?: InventoryCountUpdateManyWithoutProductNestedInput
   }
@@ -6108,37 +6181,41 @@ export namespace Prisma {
   export type ProductUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     barcode?: StringFieldUpdateOperationsInput | string
-    expectedQty?: NullableIntFieldUpdateOperationsInput | number | null
+    qty?: NullableIntFieldUpdateOperationsInput | number | null
     baselineGroupId?: NullableStringFieldUpdateOperationsInput | string | null
     category?: NullableStringFieldUpdateOperationsInput | string | null
     price?: NullableFloatFieldUpdateOperationsInput | number | null
+    adminCorrected?: BoolFieldUpdateOperationsInput | boolean
     counts?: InventoryCountUncheckedUpdateManyWithoutProductNestedInput
   }
 
   export type ProductCreateManyInput = {
     id?: string
     barcode: string
-    expectedQty?: number | null
+    qty?: number | null
     baselineGroupId?: string | null
     category?: string | null
     price?: number | null
+    adminCorrected?: boolean
   }
 
   export type ProductUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     barcode?: StringFieldUpdateOperationsInput | string
-    expectedQty?: NullableIntFieldUpdateOperationsInput | number | null
+    qty?: NullableIntFieldUpdateOperationsInput | number | null
     category?: NullableStringFieldUpdateOperationsInput | string | null
     price?: NullableFloatFieldUpdateOperationsInput | number | null
+    adminCorrected?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type ProductUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     barcode?: StringFieldUpdateOperationsInput | string
-    expectedQty?: NullableIntFieldUpdateOperationsInput | number | null
+    qty?: NullableIntFieldUpdateOperationsInput | number | null
     baselineGroupId?: NullableStringFieldUpdateOperationsInput | string | null
     category?: NullableStringFieldUpdateOperationsInput | string | null
     price?: NullableFloatFieldUpdateOperationsInput | number | null
+    adminCorrected?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type InventoryCountCreateInput = {
@@ -6147,6 +6224,7 @@ export namespace Prisma {
     location: string
     timestamp?: Date | string
     isMismatch?: boolean
+    mismatchType?: $Enums.MismatchType
     product: ProductCreateNestedOneWithoutCountsInput
     group: GroupCreateNestedOneWithoutCountsInput
   }
@@ -6159,6 +6237,7 @@ export namespace Prisma {
     location: string
     timestamp?: Date | string
     isMismatch?: boolean
+    mismatchType?: $Enums.MismatchType
   }
 
   export type InventoryCountUpdateInput = {
@@ -6167,6 +6246,7 @@ export namespace Prisma {
     location?: StringFieldUpdateOperationsInput | string
     timestamp?: DateTimeFieldUpdateOperationsInput | Date | string
     isMismatch?: BoolFieldUpdateOperationsInput | boolean
+    mismatchType?: EnumMismatchTypeFieldUpdateOperationsInput | $Enums.MismatchType
     product?: ProductUpdateOneRequiredWithoutCountsNestedInput
     group?: GroupUpdateOneRequiredWithoutCountsNestedInput
   }
@@ -6179,6 +6259,7 @@ export namespace Prisma {
     location?: StringFieldUpdateOperationsInput | string
     timestamp?: DateTimeFieldUpdateOperationsInput | Date | string
     isMismatch?: BoolFieldUpdateOperationsInput | boolean
+    mismatchType?: EnumMismatchTypeFieldUpdateOperationsInput | $Enums.MismatchType
   }
 
   export type InventoryCountCreateManyInput = {
@@ -6189,6 +6270,7 @@ export namespace Prisma {
     location: string
     timestamp?: Date | string
     isMismatch?: boolean
+    mismatchType?: $Enums.MismatchType
   }
 
   export type InventoryCountUpdateManyMutationInput = {
@@ -6197,6 +6279,7 @@ export namespace Prisma {
     location?: StringFieldUpdateOperationsInput | string
     timestamp?: DateTimeFieldUpdateOperationsInput | Date | string
     isMismatch?: BoolFieldUpdateOperationsInput | boolean
+    mismatchType?: EnumMismatchTypeFieldUpdateOperationsInput | $Enums.MismatchType
   }
 
   export type InventoryCountUncheckedUpdateManyInput = {
@@ -6207,6 +6290,7 @@ export namespace Prisma {
     location?: StringFieldUpdateOperationsInput | string
     timestamp?: DateTimeFieldUpdateOperationsInput | Date | string
     isMismatch?: BoolFieldUpdateOperationsInput | boolean
+    mismatchType?: EnumMismatchTypeFieldUpdateOperationsInput | $Enums.MismatchType
   }
 
   export type StringFilter<$PrismaModel = never> = {
@@ -6366,6 +6450,11 @@ export namespace Prisma {
     not?: NestedFloatNullableFilter<$PrismaModel> | number | null
   }
 
+  export type BoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
   export type GroupNullableScalarRelationFilter = {
     is?: GroupWhereInput | null
     isNot?: GroupWhereInput | null
@@ -6379,37 +6468,40 @@ export namespace Prisma {
   export type ProductCountOrderByAggregateInput = {
     id?: SortOrder
     barcode?: SortOrder
-    expectedQty?: SortOrder
+    qty?: SortOrder
     baselineGroupId?: SortOrder
     category?: SortOrder
     price?: SortOrder
+    adminCorrected?: SortOrder
   }
 
   export type ProductAvgOrderByAggregateInput = {
-    expectedQty?: SortOrder
+    qty?: SortOrder
     price?: SortOrder
   }
 
   export type ProductMaxOrderByAggregateInput = {
     id?: SortOrder
     barcode?: SortOrder
-    expectedQty?: SortOrder
+    qty?: SortOrder
     baselineGroupId?: SortOrder
     category?: SortOrder
     price?: SortOrder
+    adminCorrected?: SortOrder
   }
 
   export type ProductMinOrderByAggregateInput = {
     id?: SortOrder
     barcode?: SortOrder
-    expectedQty?: SortOrder
+    qty?: SortOrder
     baselineGroupId?: SortOrder
     category?: SortOrder
     price?: SortOrder
+    adminCorrected?: SortOrder
   }
 
   export type ProductSumOrderByAggregateInput = {
-    expectedQty?: SortOrder
+    qty?: SortOrder
     price?: SortOrder
   }
 
@@ -6463,6 +6555,14 @@ export namespace Prisma {
     _max?: NestedFloatNullableFilter<$PrismaModel>
   }
 
+  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
+  }
+
   export type IntFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
     in?: number[] | ListIntFieldRefInput<$PrismaModel>
@@ -6474,9 +6574,11 @@ export namespace Prisma {
     not?: NestedIntFilter<$PrismaModel> | number
   }
 
-  export type BoolFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolFilter<$PrismaModel> | boolean
+  export type EnumMismatchTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.MismatchType | EnumMismatchTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.MismatchType[] | ListEnumMismatchTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.MismatchType[] | ListEnumMismatchTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumMismatchTypeFilter<$PrismaModel> | $Enums.MismatchType
   }
 
   export type ProductScalarRelationFilter = {
@@ -6497,6 +6599,7 @@ export namespace Prisma {
     location?: SortOrder
     timestamp?: SortOrder
     isMismatch?: SortOrder
+    mismatchType?: SortOrder
   }
 
   export type InventoryCountAvgOrderByAggregateInput = {
@@ -6511,6 +6614,7 @@ export namespace Prisma {
     location?: SortOrder
     timestamp?: SortOrder
     isMismatch?: SortOrder
+    mismatchType?: SortOrder
   }
 
   export type InventoryCountMinOrderByAggregateInput = {
@@ -6521,6 +6625,7 @@ export namespace Prisma {
     location?: SortOrder
     timestamp?: SortOrder
     isMismatch?: SortOrder
+    mismatchType?: SortOrder
   }
 
   export type InventoryCountSumOrderByAggregateInput = {
@@ -6543,12 +6648,14 @@ export namespace Prisma {
     _max?: NestedIntFilter<$PrismaModel>
   }
 
-  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+  export type EnumMismatchTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.MismatchType | EnumMismatchTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.MismatchType[] | ListEnumMismatchTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.MismatchType[] | ListEnumMismatchTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumMismatchTypeWithAggregatesFilter<$PrismaModel> | $Enums.MismatchType
     _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedBoolFilter<$PrismaModel>
-    _max?: NestedBoolFilter<$PrismaModel>
+    _min?: NestedEnumMismatchTypeFilter<$PrismaModel>
+    _max?: NestedEnumMismatchTypeFilter<$PrismaModel>
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -6683,6 +6790,10 @@ export namespace Prisma {
     divide?: number
   }
 
+  export type BoolFieldUpdateOperationsInput = {
+    set?: boolean
+  }
+
   export type GroupUpdateOneWithoutBaselineProductsNestedInput = {
     create?: XOR<GroupCreateWithoutBaselineProductsInput, GroupUncheckedCreateWithoutBaselineProductsInput>
     connectOrCreate?: GroupCreateOrConnectWithoutBaselineProductsInput
@@ -6741,8 +6852,8 @@ export namespace Prisma {
     divide?: number
   }
 
-  export type BoolFieldUpdateOperationsInput = {
-    set?: boolean
+  export type EnumMismatchTypeFieldUpdateOperationsInput = {
+    set?: $Enums.MismatchType
   }
 
   export type ProductUpdateOneRequiredWithoutCountsNestedInput = {
@@ -6864,6 +6975,11 @@ export namespace Prisma {
     not?: NestedFloatNullableFilter<$PrismaModel> | number | null
   }
 
+  export type NestedBoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
   export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel> | null
     in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
@@ -6913,9 +7029,19 @@ export namespace Prisma {
     _max?: NestedFloatNullableFilter<$PrismaModel>
   }
 
-  export type NestedBoolFilter<$PrismaModel = never> = {
+  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
     equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolFilter<$PrismaModel> | boolean
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
+  }
+
+  export type NestedEnumMismatchTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.MismatchType | EnumMismatchTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.MismatchType[] | ListEnumMismatchTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.MismatchType[] | ListEnumMismatchTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumMismatchTypeFilter<$PrismaModel> | $Enums.MismatchType
   }
 
   export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
@@ -6945,29 +7071,33 @@ export namespace Prisma {
     not?: NestedFloatFilter<$PrismaModel> | number
   }
 
-  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+  export type NestedEnumMismatchTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.MismatchType | EnumMismatchTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.MismatchType[] | ListEnumMismatchTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.MismatchType[] | ListEnumMismatchTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumMismatchTypeWithAggregatesFilter<$PrismaModel> | $Enums.MismatchType
     _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedBoolFilter<$PrismaModel>
-    _max?: NestedBoolFilter<$PrismaModel>
+    _min?: NestedEnumMismatchTypeFilter<$PrismaModel>
+    _max?: NestedEnumMismatchTypeFilter<$PrismaModel>
   }
 
   export type ProductCreateWithoutBaselineGroupInput = {
     id?: string
     barcode: string
-    expectedQty?: number | null
+    qty?: number | null
     category?: string | null
     price?: number | null
+    adminCorrected?: boolean
     counts?: InventoryCountCreateNestedManyWithoutProductInput
   }
 
   export type ProductUncheckedCreateWithoutBaselineGroupInput = {
     id?: string
     barcode: string
-    expectedQty?: number | null
+    qty?: number | null
     category?: string | null
     price?: number | null
+    adminCorrected?: boolean
     counts?: InventoryCountUncheckedCreateNestedManyWithoutProductInput
   }
 
@@ -6987,6 +7117,7 @@ export namespace Prisma {
     location: string
     timestamp?: Date | string
     isMismatch?: boolean
+    mismatchType?: $Enums.MismatchType
     product: ProductCreateNestedOneWithoutCountsInput
   }
 
@@ -6997,6 +7128,7 @@ export namespace Prisma {
     location: string
     timestamp?: Date | string
     isMismatch?: boolean
+    mismatchType?: $Enums.MismatchType
   }
 
   export type InventoryCountCreateOrConnectWithoutGroupInput = {
@@ -7031,10 +7163,11 @@ export namespace Prisma {
     NOT?: ProductScalarWhereInput | ProductScalarWhereInput[]
     id?: StringFilter<"Product"> | string
     barcode?: StringFilter<"Product"> | string
-    expectedQty?: IntNullableFilter<"Product"> | number | null
+    qty?: IntNullableFilter<"Product"> | number | null
     baselineGroupId?: StringNullableFilter<"Product"> | string | null
     category?: StringNullableFilter<"Product"> | string | null
     price?: FloatNullableFilter<"Product"> | number | null
+    adminCorrected?: BoolFilter<"Product"> | boolean
   }
 
   export type InventoryCountUpsertWithWhereUniqueWithoutGroupInput = {
@@ -7064,6 +7197,7 @@ export namespace Prisma {
     location?: StringFilter<"InventoryCount"> | string
     timestamp?: DateTimeFilter<"InventoryCount"> | Date | string
     isMismatch?: BoolFilter<"InventoryCount"> | boolean
+    mismatchType?: EnumMismatchTypeFilter<"InventoryCount"> | $Enums.MismatchType
   }
 
   export type GroupCreateWithoutBaselineProductsInput = {
@@ -7091,6 +7225,7 @@ export namespace Prisma {
     location: string
     timestamp?: Date | string
     isMismatch?: boolean
+    mismatchType?: $Enums.MismatchType
     group: GroupCreateNestedOneWithoutCountsInput
   }
 
@@ -7101,6 +7236,7 @@ export namespace Prisma {
     location: string
     timestamp?: Date | string
     isMismatch?: boolean
+    mismatchType?: $Enums.MismatchType
   }
 
   export type InventoryCountCreateOrConnectWithoutProductInput = {
@@ -7157,19 +7293,21 @@ export namespace Prisma {
   export type ProductCreateWithoutCountsInput = {
     id?: string
     barcode: string
-    expectedQty?: number | null
+    qty?: number | null
     category?: string | null
     price?: number | null
+    adminCorrected?: boolean
     baselineGroup?: GroupCreateNestedOneWithoutBaselineProductsInput
   }
 
   export type ProductUncheckedCreateWithoutCountsInput = {
     id?: string
     barcode: string
-    expectedQty?: number | null
+    qty?: number | null
     baselineGroupId?: string | null
     category?: string | null
     price?: number | null
+    adminCorrected?: boolean
   }
 
   export type ProductCreateOrConnectWithoutCountsInput = {
@@ -7210,19 +7348,21 @@ export namespace Prisma {
   export type ProductUpdateWithoutCountsInput = {
     id?: StringFieldUpdateOperationsInput | string
     barcode?: StringFieldUpdateOperationsInput | string
-    expectedQty?: NullableIntFieldUpdateOperationsInput | number | null
+    qty?: NullableIntFieldUpdateOperationsInput | number | null
     category?: NullableStringFieldUpdateOperationsInput | string | null
     price?: NullableFloatFieldUpdateOperationsInput | number | null
+    adminCorrected?: BoolFieldUpdateOperationsInput | boolean
     baselineGroup?: GroupUpdateOneWithoutBaselineProductsNestedInput
   }
 
   export type ProductUncheckedUpdateWithoutCountsInput = {
     id?: StringFieldUpdateOperationsInput | string
     barcode?: StringFieldUpdateOperationsInput | string
-    expectedQty?: NullableIntFieldUpdateOperationsInput | number | null
+    qty?: NullableIntFieldUpdateOperationsInput | number | null
     baselineGroupId?: NullableStringFieldUpdateOperationsInput | string | null
     category?: NullableStringFieldUpdateOperationsInput | string | null
     price?: NullableFloatFieldUpdateOperationsInput | number | null
+    adminCorrected?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type GroupUpsertWithoutCountsInput = {
@@ -7253,9 +7393,10 @@ export namespace Prisma {
   export type ProductCreateManyBaselineGroupInput = {
     id?: string
     barcode: string
-    expectedQty?: number | null
+    qty?: number | null
     category?: string | null
     price?: number | null
+    adminCorrected?: boolean
   }
 
   export type InventoryCountCreateManyGroupInput = {
@@ -7265,32 +7406,36 @@ export namespace Prisma {
     location: string
     timestamp?: Date | string
     isMismatch?: boolean
+    mismatchType?: $Enums.MismatchType
   }
 
   export type ProductUpdateWithoutBaselineGroupInput = {
     id?: StringFieldUpdateOperationsInput | string
     barcode?: StringFieldUpdateOperationsInput | string
-    expectedQty?: NullableIntFieldUpdateOperationsInput | number | null
+    qty?: NullableIntFieldUpdateOperationsInput | number | null
     category?: NullableStringFieldUpdateOperationsInput | string | null
     price?: NullableFloatFieldUpdateOperationsInput | number | null
+    adminCorrected?: BoolFieldUpdateOperationsInput | boolean
     counts?: InventoryCountUpdateManyWithoutProductNestedInput
   }
 
   export type ProductUncheckedUpdateWithoutBaselineGroupInput = {
     id?: StringFieldUpdateOperationsInput | string
     barcode?: StringFieldUpdateOperationsInput | string
-    expectedQty?: NullableIntFieldUpdateOperationsInput | number | null
+    qty?: NullableIntFieldUpdateOperationsInput | number | null
     category?: NullableStringFieldUpdateOperationsInput | string | null
     price?: NullableFloatFieldUpdateOperationsInput | number | null
+    adminCorrected?: BoolFieldUpdateOperationsInput | boolean
     counts?: InventoryCountUncheckedUpdateManyWithoutProductNestedInput
   }
 
   export type ProductUncheckedUpdateManyWithoutBaselineGroupInput = {
     id?: StringFieldUpdateOperationsInput | string
     barcode?: StringFieldUpdateOperationsInput | string
-    expectedQty?: NullableIntFieldUpdateOperationsInput | number | null
+    qty?: NullableIntFieldUpdateOperationsInput | number | null
     category?: NullableStringFieldUpdateOperationsInput | string | null
     price?: NullableFloatFieldUpdateOperationsInput | number | null
+    adminCorrected?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type InventoryCountUpdateWithoutGroupInput = {
@@ -7299,6 +7444,7 @@ export namespace Prisma {
     location?: StringFieldUpdateOperationsInput | string
     timestamp?: DateTimeFieldUpdateOperationsInput | Date | string
     isMismatch?: BoolFieldUpdateOperationsInput | boolean
+    mismatchType?: EnumMismatchTypeFieldUpdateOperationsInput | $Enums.MismatchType
     product?: ProductUpdateOneRequiredWithoutCountsNestedInput
   }
 
@@ -7309,6 +7455,7 @@ export namespace Prisma {
     location?: StringFieldUpdateOperationsInput | string
     timestamp?: DateTimeFieldUpdateOperationsInput | Date | string
     isMismatch?: BoolFieldUpdateOperationsInput | boolean
+    mismatchType?: EnumMismatchTypeFieldUpdateOperationsInput | $Enums.MismatchType
   }
 
   export type InventoryCountUncheckedUpdateManyWithoutGroupInput = {
@@ -7318,6 +7465,7 @@ export namespace Prisma {
     location?: StringFieldUpdateOperationsInput | string
     timestamp?: DateTimeFieldUpdateOperationsInput | Date | string
     isMismatch?: BoolFieldUpdateOperationsInput | boolean
+    mismatchType?: EnumMismatchTypeFieldUpdateOperationsInput | $Enums.MismatchType
   }
 
   export type InventoryCountCreateManyProductInput = {
@@ -7327,6 +7475,7 @@ export namespace Prisma {
     location: string
     timestamp?: Date | string
     isMismatch?: boolean
+    mismatchType?: $Enums.MismatchType
   }
 
   export type InventoryCountUpdateWithoutProductInput = {
@@ -7335,6 +7484,7 @@ export namespace Prisma {
     location?: StringFieldUpdateOperationsInput | string
     timestamp?: DateTimeFieldUpdateOperationsInput | Date | string
     isMismatch?: BoolFieldUpdateOperationsInput | boolean
+    mismatchType?: EnumMismatchTypeFieldUpdateOperationsInput | $Enums.MismatchType
     group?: GroupUpdateOneRequiredWithoutCountsNestedInput
   }
 
@@ -7345,6 +7495,7 @@ export namespace Prisma {
     location?: StringFieldUpdateOperationsInput | string
     timestamp?: DateTimeFieldUpdateOperationsInput | Date | string
     isMismatch?: BoolFieldUpdateOperationsInput | boolean
+    mismatchType?: EnumMismatchTypeFieldUpdateOperationsInput | $Enums.MismatchType
   }
 
   export type InventoryCountUncheckedUpdateManyWithoutProductInput = {
@@ -7354,6 +7505,7 @@ export namespace Prisma {
     location?: StringFieldUpdateOperationsInput | string
     timestamp?: DateTimeFieldUpdateOperationsInput | Date | string
     isMismatch?: BoolFieldUpdateOperationsInput | boolean
+    mismatchType?: EnumMismatchTypeFieldUpdateOperationsInput | $Enums.MismatchType
   }
 
 

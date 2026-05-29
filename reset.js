@@ -6,8 +6,8 @@ const pool = new Pool({
 });
 
 async function reset() {
-  await pool.query('UPDATE "Product" SET "expectedQty" = NULL;');
-  console.log("Reset all expectedQty to NULL");
+  await pool.query('UPDATE "Product" SET "qty" = NULL;');
+  console.log("Reset all qty to NULL");
   pool.end();
 }
 
