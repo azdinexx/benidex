@@ -45,87 +45,49 @@ export async function recalculateMismatchesForProduct(
 
   if (!product) return;
 
-  // 1. If product has no baseline qty yet but counts exist:
-  if (product.qty === null && product.counts.length > 0) {
-    // Find the earliest count to set as the baseline
-    const sorted = [...product.counts].sort(
-      (a, b) => a.timestamp.getTime() - b.timestamp.getTime(),
-    );
-    const earliest = sorted[0];
-    await prisma.product.update({
-      where: { id: productId },
+  const baselineQty = product.qty;
+  if (baselineQty === null) return; // No baseline set yet, so no mismatches
+}
+
+export async function recalculateMismatcheForCount(
+  productId: string,
+  newCountId: string,
+): Promise<void> {
+  const newCount = await prisma.inventoryCount.findUnique({
+    where: { id: newCountId },
+    include: { product: true },
+  });
+
+  if (
+    newCount?.product.baselineGroupId &&
+    newCount?.product.baselineGroupId === newCount.groupId
+  ) {
+    await prisma.inventoryCount.updateMany({
+      where: { productId },
       data: {
-        qty: earliest.quantity,
-        baselineGroupId: earliest.groupId,
-        adminCorrected: false,
+        qty: newCount.quantity,
+        isMismatch: false,
+        mismatchType: MismatchType.UNKNOWN,
       },
     });
-    product.qty = earliest.quantity;
-    product.baselineGroupId = earliest.groupId;
+    return;
   }
 
-  // 2. Determine mismatch statuses for all counts
-  if (product.adminCorrected) {
-    // If admin has corrected the count, all current counts are marked as correct
-    for (const count of product.counts) {
-      if (count.isMismatch || count.mismatchType !== MismatchType.UNKNOWN) {
-        await prisma.inventoryCount.update({
-          where: { id: count.id },
-          data: {
-            isMismatch: false,
-            mismatchType: MismatchType.UNKNOWN,
-          },
-        });
-      }
-    }
-  } else {
-    // Sort all counts chronologically to determine "first count per location"
-    const sortedCounts = [...product.counts].sort(
-      (a, b) => a.timestamp.getTime() - b.timestamp.getTime(),
-    );
+  const counts = await prisma.inventoryCount.findMany({
+    where: { productId },
+    include: { product: true },
+    orderBy: { timestamp: "asc" },
+  });
 
-    // Build a map: location → { quantity, groupId } of the FIRST count at that location
-    const locationReference = new Map<
-      string,
-      { quantity: number; groupId: string; countId: string }
-    >();
-    for (const count of sortedCounts) {
-      if (!locationReference.has(count.location)) {
-        locationReference.set(count.location, {
-          quantity: count.quantity,
-          groupId: count.groupId,
-          countId: count.id,
-        });
-      }
-    }
+  const scannedQtyInSameLocation = counts.filter(
+    (c) => c.location === newCount?.location,
+  );
 
-    for (const count of product.counts) {
-      let isMismatch = false;
-      let mismatchType: MismatchType = MismatchType.UNKNOWN;
-
-      const ref = locationReference.get(count.location);
-
-      if (ref && count.id === ref.countId) {
-        // This is the first (reference) count for its location — never a mismatch
-        isMismatch = false;
-        mismatchType = MismatchType.UNKNOWN;
-      } else if (ref && count.quantity !== ref.quantity) {
-        // A later group counted the same product at the same location with a different quantity
-        isMismatch = true;
-        mismatchType = MismatchType.QUANTITY_MISMATCH;
-      }
-
-      if (
-        count.isMismatch !== isMismatch ||
-        count.mismatchType !== mismatchType
-      ) {
-        await prisma.inventoryCount.update({
-          where: { id: count.id },
-          data: { isMismatch, mismatchType },
-        });
-      }
-    }
-  }
+  const baselineCount = counts.find(
+    (c) =>
+      c.product.baselineGroupId === c.groupId &&
+      c.location === newCount?.location,
+  );
 }
 
 export async function submitCountAction(
@@ -209,10 +171,12 @@ export async function submitCountAction(
           adminCorrected: false,
         },
       });
-    }
 
-    // Recalculate mismatches for all counts of this product
-    await recalculateMismatchesForProduct(product.id);
+      return {
+        success: true,
+        data: { ...newCount, product: { ...product, qty: quantity } },
+      };
+    }
 
     // Retrieve the updated count
     const updatedCount = await prisma.inventoryCount.findUnique({
